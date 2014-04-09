@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="ipuc" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.ipuc.base.tarjeta.Tarjeta</class>
+    <class>com.ipuc.base.congregacion.Congregacion</class>
+    <class>com.ipuc.base.persona.Persona</class>
+    <class>com.ipuc.base.pastor.Pastor</class>
+    <class>com.ipuc.base.historialTarjeta.HistorialTarjeta</class>
+    <class>com.ipuc.base.ceremonia.Ceremonia</class>
+    <class>com.ipuc.base.trayectoria.Trayectoria</class>
+    <class>com.ipuc.base.creyente.Creyente</class>
+    <class>com.ipuc.base.membresia.Membresia</class>
+  </persistence-unit>
+</persistence>
