@@ -11,5 +11,14 @@
     <import resource="persistence-context.xml" />
 
     <context:property-placeholder />
+    <bean id="ceremoniaManager" class="com.ipuc.base.ceremonia.JPACeremoniaManager"/>
+    <bean id="congregacionManager" class="com.ipuc.base.congregacion.JPACongregacionManager"/>
+    <bean id="creyenteManager" class="com.ipuc.base.creyente.JPACreyenteManager"/>
+    <bean id="historialTarjetaManager" class="com.ipuc.base.historialTarjeta.JPAHistorialTarjetaManager"/>
+    <bean id="membresiaManager" class="com.ipuc.base.membresia.JPAMembresiaManager"/>
+    <bean id="pastorManager" class="com.ipuc.base.pastor.JPAPastorManager"/>
+    <bean id="personaManager" class="com.ipuc.base.persona.JPAPersonaManager"/>
+    <bean id="tarjetaManager" class="com.ipuc.base.tarjeta.JPATarjetaManager"/>
+    <bean id="trayectoriaManager" class="com.ipuc.base.trayectoria.JPATrayectoriaManager"/>
 
 </beans>
