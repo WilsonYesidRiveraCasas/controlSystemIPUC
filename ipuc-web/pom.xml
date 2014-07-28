@@ -23,14 +23,24 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>ipuc-base</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
         <groupId>org.jogger</groupId>
         <artifactId>jogger-core</artifactId>
         <version>0.10.0</version>
+    </dependency>
+    <dependency>
+	<groupId>log4j</groupId>
+	<artifactId>log4j</artifactId>
+	<version>1.2.17</version>
+    </dependency>
+    <dependency>
+	<groupId>org.json</groupId>
+	<artifactId>json</artifactId>
+	<version>20140107</version>
+    </dependency>
+    <dependency>
+	<groupId>javax.mail</groupId>
+	<artifactId>mail</artifactId>
+	<version>1.4.7</version>
     </dependency>
   </dependencies>
   <repositories>

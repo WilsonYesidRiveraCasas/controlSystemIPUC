@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true"
+                     xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+   <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="[%d{ABSOLUTE}] %-5p [%c] %m%n"/>
+      </layout>
+   </appender>
+
+   <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
+      <param name="append" value="false"/>
+      <param name="file" value="ipuc-webapp.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="[%d{ABSOLUTE}] %-5p [%c] %m%n"/>
+      </layout>
+   </appender>
+   
+       <!-- will only sends error events -->
+    <appender name="Email" class="org.apache.log4j.net.SMTPAppender">
+        <param name="BufferSize" value="1" /> <!-- default is 512, changed for test cases to work -->
+        <param name="SMTPProtocol" value="smtps" /> <!-- GMail will not work without this, log4j 1.2.16 is required -->
+        <param name="SMTPHost" value="smtp.gmail.com" />
+        <param name="SMTPPort" value="465" />
+        <param name="SMTPUsername" value="wilson.rivera.1150010@gmail.com" /> <!-- example@gmail.com -->
+        <param name="SMTPPassword" value="huespedrvera89" /> <!-- passowrd -->
+        <param name="To" value="wilson.rivera.1150010@gmail.com" />
+        <param name="Subject" value="Suscripcion" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ABSOLUTE}] %-5p [%c] %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="EMAIL_ASYNC" class="org.apache.log4j.AsyncAppender">
+        <param name="BufferSize" value="1"/>
+        <appender-ref ref="Email"/>
+    </appender>
+
+   <root>
+      <level value="INFO"/>
+      <appender-ref ref="consoleAppender"/>
+      <appender-ref ref="fileAppender"/>
+      <appender-ref ref="EMAIL_ASYNC" />
+   </root>
+
+</log4j:configuration>
