@@ -1,21 +1,22 @@
 
 package com.ipuc.base.persona;
 
+import com.ipuc.base.tipoIdentificacion.TipoIdentificacion;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.Email;
 import org.hibernate.validator.Length;
-import org.hibernate.validator.NotNull;
 
 /**
  *
@@ -23,14 +24,10 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "persona")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Persona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    private String numIdentificacion;
-
-    private String tipoIdentificacion;
+    private String numeroIdentificacion;
 
     private String primerNombre;
 
@@ -50,38 +47,47 @@ public class Persona implements Serializable {
 
     private String estadoCivil;
 
+    private String email;
+
     private String foto;
 
-    private List<Persona> hijosDeMadre;
-
+    private TipoIdentificacion tipoIdentificacion;
+    
+    private Persona padre;
+    
     private Persona madre;
 
-    private List<Persona> hijosDePadre;
+    public Persona() {
+    }
 
-    private Persona padre;
+    public Persona(String numeroIdentificacion) {
+        this.numeroIdentificacion = numeroIdentificacion;
+    }
+
+    public Persona(String numeroIdentificacion, String primerNombre, String primerApellido, String sexo, Date fechaNacimiento, String estadoCivil) {
+        this.numeroIdentificacion = numeroIdentificacion;
+        this.primerNombre = primerNombre;
+        this.primerApellido = primerApellido;
+        this.sexo = sexo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.estadoCivil = estadoCivil;
+    }
 
     @Id
-    @Column(name = "num_identificacion")
-    public String getNumIdentificacion() {
-        return numIdentificacion;
-    }
-
-    public void setNumIdentificacion(String numIdentificacion) {
-        this.numIdentificacion = numIdentificacion;
-    }
-
-    @Column(name = "tipo_identificacion")
     @NotNull
-    public String getTipoIdentificacion() {
-        return tipoIdentificacion;
+    @Length(max = 50)
+    @Column(name = "numero_identificacion")
+    public String getNumeroIdentificacion() {
+        return numeroIdentificacion;
     }
 
-    public void setTipoIdentificacion(String tipoIdentificacion) {
-        this.tipoIdentificacion = tipoIdentificacion;
+    public void setNumeroIdentificacion(String numeroIdentificacion) {
+        this.numeroIdentificacion = numeroIdentificacion;
     }
 
+    @NotNull
+    @Length(max = 50)
     @Column(name = "primer_nombre")
-    @NotNull
     public String getPrimerNombre() {
         return primerNombre;
     }
@@ -90,6 +96,7 @@ public class Persona implements Serializable {
         this.primerNombre = primerNombre;
     }
 
+    @Length(max = 50)
     @Column(name = "segundo_nombre")
     public String getSegundoNombre() {
         return segundoNombre;
@@ -99,8 +106,9 @@ public class Persona implements Serializable {
         this.segundoNombre = segundoNombre;
     }
 
-    @Column(name = "primer_apellido")
     @NotNull
+    @Length(max = 50)
+    @Column(name = "primer_apellido")
     public String getPrimerApellido() {
         return primerApellido;
     }
@@ -109,6 +117,7 @@ public class Persona implements Serializable {
         this.primerApellido = primerApellido;
     }
 
+    @Length(max = 50)
     @Column(name = "segundo_apellido")
     public String getSegundoApellido() {
         return segundoApellido;
@@ -118,8 +127,9 @@ public class Persona implements Serializable {
         this.segundoApellido = segundoApellido;
     }
 
-    @Column(name = "sexo")
+    @NotNull
     @Length(max = 1)
+    @Column(name = "sexo")
     public String getSexo() {
         return sexo;
     }
@@ -128,9 +138,9 @@ public class Persona implements Serializable {
         this.sexo = sexo;
     }
 
-    @Column(name = "fecha_nacimiento")
     @NotNull
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "fecha_nacimiento")
+    @Temporal(TemporalType.DATE)
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -139,6 +149,7 @@ public class Persona implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    @Length(max = 100)
     @Column(name = "lugar_nacimiento")
     public String getLugarNacimiento() {
         return lugarNacimiento;
@@ -148,6 +159,7 @@ public class Persona implements Serializable {
         this.lugarNacimiento = lugarNacimiento;
     }
 
+    @Length(max = 50)
     @Column(name = "telefono")
     public String getTelefono() {
         return telefono;
@@ -157,8 +169,9 @@ public class Persona implements Serializable {
         this.telefono = telefono;
     }
 
-    @Column(name = "estado_civil")
     @NotNull
+    @Length(max = 20)
+    @Column(name = "estado_civil")
     public String getEstadoCivil() {
         return estadoCivil;
     }
@@ -167,6 +180,17 @@ public class Persona implements Serializable {
         this.estadoCivil = estadoCivil;
     }
 
+    @Email
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Length(max = 100)
     @Column(name = "foto")
     public String getFoto() {
         return foto;
@@ -176,17 +200,17 @@ public class Persona implements Serializable {
         this.foto = foto;
     }
 
-    @JoinColumn(name = "madre", referencedColumnName = "num_identificacion")
-    @ManyToOne
-    public Persona getMadre() {
-        return madre;
+    @JoinColumn(name = "tipo_identificacion", referencedColumnName = "cod_tipo_identificacion")
+    @ManyToOne(optional = false)
+    public TipoIdentificacion getTipoIdentificacion() {
+        return tipoIdentificacion;
     }
 
-    public void setMadre(Persona madre) {
-        this.madre = madre;
+    public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
+        this.tipoIdentificacion = tipoIdentificacion;
     }
 
-    @JoinColumn(name = "padre", referencedColumnName = "num_identificacion")
+    @JoinColumn(name = "padre", referencedColumnName = "numero_identificacion")
     @ManyToOne
     public Persona getPadre() {
         return padre;
@@ -196,22 +220,14 @@ public class Persona implements Serializable {
         this.padre = padre;
     }
 
-    @OneToMany(mappedBy = "madre")
-    public List<Persona> getHijosDeMadre() {
-        return hijosDeMadre;
+    @JoinColumn(name = "madre", referencedColumnName = "numero_identificacion")
+    @ManyToOne
+    public Persona getMadre() {
+        return madre;
     }
 
-    public void setHijosDeMadre(List<Persona> hijosDeMadre) {
-        this.hijosDeMadre = hijosDeMadre;
+    public void setMadre(Persona madre) {
+        this.madre = madre;
     }
-
-    @OneToMany(mappedBy = "padre")
-    public List<Persona> getHijosDePadre() {
-        return hijosDePadre;
-    }
-
-    public void setHijosDePadre(List<Persona> hijosDePadre) {
-        this.hijosDePadre = hijosDePadre;
-    }
-
+    
 }

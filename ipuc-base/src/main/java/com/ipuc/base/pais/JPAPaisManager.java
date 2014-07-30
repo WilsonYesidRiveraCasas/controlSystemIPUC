@@ -1,36 +1,27 @@
 
-package com.ipuc.base.pastor;
+package com.ipuc.base.pais;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author wilson-rivera
  */
-public class JPAPastorManager implements PastorManager {
+public class JPAPaisManager implements PaisManager {
 
-    private static Logger log = LoggerFactory.getLogger(JPAPastorManager.class);
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public void create(Pastor pastor) {
+    public void create(Pais pais) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void update(Pastor pastor) throws Exception {
+    public void update(Pais pais) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Pastor find(String cod_congregacion) throws Exception {
+    public Pais find(String cod_pais) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Pastor> findAll() throws Exception {
+    public List<Pais> findAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

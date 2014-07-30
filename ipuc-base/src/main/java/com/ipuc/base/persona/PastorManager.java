@@ -1,5 +1,5 @@
 
-package com.ipuc.base.pastor;
+package com.ipuc.base.persona;
 
 import java.util.List;
 

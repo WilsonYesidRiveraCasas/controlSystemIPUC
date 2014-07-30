@@ -1,26 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.ipuc.base.trayectoria;
 
+import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.congregacion.Congregacion;
-import com.ipuc.base.pastor.Pastor;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,30 +23,40 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "trayectoria")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Trayectoria implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    protected TrayectoriaPK trayectoriaPK;
+    private int idTrayectoria;
 
     private Date fechaPosesion;
 
-    private Date fechaTraslado;
-
-    private String observacion;
-
-    private Congregacion congregacion;
+    private String fechaTraslado;
 
     private Pastor pastor;
 
-    @EmbeddedId
-    public TrayectoriaPK getTrayectoriaPK() {
-        return trayectoriaPK;
+    private Congregacion congregacion;
+
+    public Trayectoria() {
     }
 
-    public void setTrayectoriaPK(TrayectoriaPK trayectoriaPK) {
-        this.trayectoriaPK = trayectoriaPK;
+    public Trayectoria(int idTrayectoria) {
+        this.idTrayectoria = idTrayectoria;
+    }
+
+    public Trayectoria(int idTrayectoria, Date fechaPosesion) {
+        this.idTrayectoria = idTrayectoria;
+        this.fechaPosesion = fechaPosesion;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
+    @Column(name = "id_trayectoria")
+    public int getIdTrayectoria() {
+        return idTrayectoria;
+    }
+
+    public void setIdTrayectoria(int idTrayectoria) {
+        this.idTrayectoria = idTrayectoria;
     }
 
     @NotNull
@@ -66,35 +71,15 @@ public class Trayectoria implements Serializable {
     }
 
     @Column(name = "fecha_traslado")
-    @Temporal(TemporalType.DATE)
-    public Date getFechaTraslado() {
+    public String getFechaTraslado() {
         return fechaTraslado;
     }
 
-    public void setFechaTraslado(Date fechaTraslado) {
+    public void setFechaTraslado(String fechaTraslado) {
         this.fechaTraslado = fechaTraslado;
     }
 
-    @Column(name = "observacion")
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    @JoinColumn(name = "cod_congregacion", referencedColumnName = "cod_congregacion", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    public Congregacion getCongregacion() {
-        return congregacion;
-    }
-
-    public void setCongregacion(Congregacion congregacion) {
-        this.congregacion = congregacion;
-    }
-
-    @JoinColumn(name = "num_identificacion", referencedColumnName = "num_identificacion", insertable = false, updatable = false)
+    @JoinColumn(name = "pastor", referencedColumnName = "numero_identificacion")
     @ManyToOne(optional = false)
     public Pastor getPastor() {
         return pastor;
@@ -102,6 +87,16 @@ public class Trayectoria implements Serializable {
 
     public void setPastor(Pastor pastor) {
         this.pastor = pastor;
+    }
+
+    @JoinColumn(name = "congregacion", referencedColumnName = "cod_congregacion")
+    @ManyToOne(optional = false)
+    public Congregacion getCongregacion() {
+        return congregacion;
+    }
+
+    public void setCongregacion(Congregacion congregacion) {
+        this.congregacion = congregacion;
     }
 
 }

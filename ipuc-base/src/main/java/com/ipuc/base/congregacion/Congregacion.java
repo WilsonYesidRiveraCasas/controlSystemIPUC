@@ -1,7 +1,10 @@
 
 package com.ipuc.base.congregacion;
 
+import com.ipuc.base.persona.Creyente;
 import com.ipuc.base.membresia.Membresia;
+import com.ipuc.base.municipio.Municipio;
+import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.trayectoria.Trayectoria;
 import java.io.Serializable;
 import java.util.Date;
@@ -10,12 +13,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.Length;
 
 /**
  *
@@ -23,19 +29,11 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "congregacion")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Congregacion implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "congregacion")
-    private List<Membresia> membresiaList;
-
-
-    private static final long serialVersionUID = 1L;
 
     private String codCongregacion;
 
     private String nombre;
-
-    private Date fechaApertura;
 
     private String direccion;
 
@@ -43,13 +41,35 @@ public class Congregacion implements Serializable {
 
     private String distrito;
 
-    private String municipio;
+    private Municipio municipio;
 
-    private String departamento;
+    private Date fechaApertura;
 
-    private List<Trayectoria> trayectoriaList;
+    private Pastor pastor;
+
+    private List<Trayectoria> trayectoriaPastores;
+    
+    private List<Membresia> membresias;
+    
+    private List<Creyente> creyentes;
+
+    public Congregacion() {
+    }
+
+    public Congregacion(String codCongregacion) {
+        this.codCongregacion = codCongregacion;
+    }
+
+    public Congregacion(String codCongregacion, String nombre, String distrito, Date fechaApertura) {
+        this.codCongregacion = codCongregacion;
+        this.nombre = nombre;
+        this.distrito = distrito;
+        this.fechaApertura = fechaApertura;
+    }
 
     @Id
+    @NotNull
+    @Length(max = 50)
     @Column(name = "cod_congregacion")
     public String getCodCongregacion() {
         return codCongregacion;
@@ -59,8 +79,9 @@ public class Congregacion implements Serializable {
         this.codCongregacion = codCongregacion;
     }
 
-    @Column(name = "nombre")
     @NotNull
+    @Length(max = 50)
+    @Column(name = "nombre")
     public String getNombre() {
         return nombre;
     }
@@ -69,18 +90,8 @@ public class Congregacion implements Serializable {
         this.nombre = nombre;
     }
 
-    @Column(name = "fecha_apertura")
-    @NotNull
-    public Date getFechaApertura() {
-        return fechaApertura;
-    }
-
-    public void setFechaApertura(Date fechaApertura) {
-        this.fechaApertura = fechaApertura;
-    }
-
+    @Length(max = 200)
     @Column(name = "direccion")
-    @NotNull
     public String getDireccion() {
         return direccion;
     }
@@ -89,6 +100,7 @@ public class Congregacion implements Serializable {
         this.direccion = direccion;
     }
 
+    @Length(max = 50)
     @Column(name = "telefono")
     public String getTelefono() {
         return telefono;
@@ -98,8 +110,9 @@ public class Congregacion implements Serializable {
         this.telefono = telefono;
     }
 
-    @Column(name = "distrito")
     @NotNull
+    @Length(max = 10)
+    @Column(name = "distrito")
     public String getDistrito() {
         return distrito;
     }
@@ -108,45 +121,62 @@ public class Congregacion implements Serializable {
         this.distrito = distrito;
     }
 
-    @Column(name = "municipio")
-    @NotNull
-    public String getMunicipio() {
+    @JoinColumn(name = "municipio", referencedColumnName = "idMunicipio")
+    @ManyToOne(optional = false)
+    public Municipio getMunicipio() {
         return municipio;
     }
 
-    public void setMunicipio(String municipio) {
+    public void setMunicipio(Municipio municipio) {
         this.municipio = municipio;
     }
 
-    @Column(name = "departamento")
     @NotNull
-    public String getDepartamento() {
-        return departamento;
+    @Column(name = "fecha_apertura")
+    @Temporal(TemporalType.DATE)
+    public Date getFechaApertura() {
+        return fechaApertura;
     }
 
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
     }
 
-    public Congregacion() {
+    @JoinColumn(name = "pastor", referencedColumnName = "numero_identificacion")
+    @OneToOne
+    public Pastor getPastor() {
+        return pastor;
+    }
+
+    public void setPastor(Pastor pastor) {
+        this.pastor = pastor;
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "congregacion")
-    public List<Trayectoria> getTrayectoriaList() {
-        return trayectoriaList;
+    public List<Trayectoria> getTrayectoriaPastores() {
+        return trayectoriaPastores;
     }
 
-    public void setTrayectoriaList(List<Trayectoria> trayectoriaList) {
-        this.trayectoriaList = trayectoriaList;
+    public void setTrayectoriaPastores(List<Trayectoria> trayectoriaPastores) {
+        this.trayectoriaPastores = trayectoriaPastores;
     }
 
-    @XmlTransient
-    public List<Membresia> getMembresiaList() {
-        return membresiaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "congregacion")
+    public List<Membresia> getMembresias() {
+        return membresias;
     }
 
-    public void setMembresiaList(List<Membresia> membresiaList) {
-        this.membresiaList = membresiaList;
+    public void setMembresias(List<Membresia> membresias) {
+        this.membresias = membresias;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "congregacion")
+    public List<Creyente> getCreyentes() {
+        return creyentes;
+    }
+
+    public void setCreyentes(List<Creyente> creyentes) {
+        this.creyentes = creyentes;
+    }
+    
 }

@@ -1,26 +1,21 @@
 
 package com.ipuc.base.ceremonia;
 
-import com.ipuc.base.creyente.Creyente;
-import com.ipuc.base.pastor.Pastor;
+import com.ipuc.base.persona.Pastor;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,12 +23,9 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "ceremonia")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Ceremonia implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    private String idCeremonia;
+    private int idCeremonia;
 
     private Date fechaCelebracion;
 
@@ -41,14 +33,27 @@ public class Ceremonia implements Serializable {
 
     private Pastor pastorOficiante;
 
+    public Ceremonia() {
+    }
+
+    public Ceremonia(int idCeremonia) {
+        this.idCeremonia = idCeremonia;
+    }
+
+    public Ceremonia(int idCeremonia, Date fechaCelebracion) {
+        this.idCeremonia = idCeremonia;
+        this.fechaCelebracion = fechaCelebracion;
+    }
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "id_ceremonia")
-    @GeneratedValue
-    public String getIdCeremonia() {
+    public int getIdCeremonia() {
         return idCeremonia;
     }
 
-    public void setIdCeremonia(String idCeremonia) {
+    public void setIdCeremonia(int idCeremonia) {
         this.idCeremonia = idCeremonia;
     }
 
@@ -72,8 +77,8 @@ public class Ceremonia implements Serializable {
         this.lugar = lugar;
     }
 
-    @JoinColumn(name = "pastor_oficiante", referencedColumnName = "num_identificacion")
-    @ManyToOne
+    @JoinColumn(name = "pastor_oficiante", referencedColumnName = "numero_identificacion")
+    @ManyToOne(optional = false)
     public Pastor getPastorOficiante() {
         return pastorOficiante;
     }
@@ -81,8 +86,5 @@ public class Ceremonia implements Serializable {
     public void setPastorOficiante(Pastor pastorOficiante) {
         this.pastorOficiante = pastorOficiante;
     }
-
-    public Ceremonia() {
-    }
-
+    
 }

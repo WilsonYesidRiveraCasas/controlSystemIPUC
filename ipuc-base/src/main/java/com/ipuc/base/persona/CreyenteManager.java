@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.ipuc.base.creyente;
+package com.ipuc.base.persona;
 
 import java.util.List;
 
