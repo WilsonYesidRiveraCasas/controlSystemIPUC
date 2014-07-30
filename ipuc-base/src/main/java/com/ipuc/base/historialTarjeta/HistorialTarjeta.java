@@ -1,22 +1,21 @@
 
 package com.ipuc.base.historialTarjeta;
 
-import com.ipuc.base.pastor.Pastor;
+import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.tarjeta.Tarjeta;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -24,26 +23,38 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "historial_tarjeta")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class HistorialTarjeta implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    protected HistorialTarjetaPK historialTarjetaPK;
+    private int idHistorialTarjeta;
 
     private Date fechaRecibida;
 
-    private Pastor pastor;
-
     private Tarjeta tarjeta;
 
-    @EmbeddedId
-    public HistorialTarjetaPK getHistorialTarjetaPK() {
-        return historialTarjetaPK;
+    private Pastor pastor;
+
+    public HistorialTarjeta() {
     }
 
-    public void setHistorialTarjetaPK(HistorialTarjetaPK historialTarjetaPK) {
-        this.historialTarjetaPK = historialTarjetaPK;
+    public HistorialTarjeta(int idHistorialTarjeta) {
+        this.idHistorialTarjeta = idHistorialTarjeta;
+    }
+
+    public HistorialTarjeta(int idHistorialTarjeta, Date fechaRecibida) {
+        this.idHistorialTarjeta = idHistorialTarjeta;
+        this.fechaRecibida = fechaRecibida;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
+    @Column(name = "id_historial_tarjeta")
+    public int getIdHistorialTarjeta() {
+        return idHistorialTarjeta;
+    }
+
+    public void setIdHistorialTarjeta(int idHistorialTarjeta) {
+        this.idHistorialTarjeta = idHistorialTarjeta;
     }
 
     @NotNull
@@ -57,17 +68,7 @@ public class HistorialTarjeta implements Serializable {
         this.fechaRecibida = fechaRecibida;
     }
 
-    @JoinColumn(name = "num_identificacion", referencedColumnName = "num_identificacion", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    public Pastor getPastor() {
-        return pastor;
-    }
-
-    public void setPastor(Pastor pastor) {
-        this.pastor = pastor;
-    }
-
-    @JoinColumn(name = "id_tarjeta", referencedColumnName = "id_tarjeta", insertable = false, updatable = false)
+    @JoinColumn(name = "id_tarjeta", referencedColumnName = "cod_tarjeta")
     @ManyToOne(optional = false)
     public Tarjeta getTarjeta() {
         return tarjeta;
@@ -75,6 +76,16 @@ public class HistorialTarjeta implements Serializable {
 
     public void setTarjeta(Tarjeta tarjeta) {
         this.tarjeta = tarjeta;
+    }
+
+    @JoinColumn(name = "id_identificacion_pastor", referencedColumnName = "numero_identificacion")
+    @ManyToOne(optional = false)
+    public Pastor getPastor() {
+        return pastor;
+    }
+
+    public void setPastor(Pastor pastor) {
+        this.pastor = pastor;
     }
 
 }

@@ -1,10 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-package com.ipuc.base.creyente;
+package com.ipuc.base.persona;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,26 +11,26 @@ import org.slf4j.LoggerFactory;
  *
  * @author wilson-rivera
  */
-public class JPACreyenteManager implements CreyenteManager {
+public class JPAPastorManager implements PastorManager {
 
-    private static Logger log = LoggerFactory.getLogger(JPACreyenteManager.class);
+    private static Logger log = LoggerFactory.getLogger(JPAPastorManager.class);
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Creyente creyente) {
+    public void create(Pastor pastor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void update(Creyente creyente) throws Exception {
+    public void update(Pastor pastor) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Creyente find(String num_identificacion) throws Exception {
+    public Pastor find(String cod_congregacion) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Creyente> findAll() throws Exception {
+    public List<Pastor> findAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

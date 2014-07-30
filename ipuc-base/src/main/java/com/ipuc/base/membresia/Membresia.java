@@ -1,24 +1,21 @@
 
 package com.ipuc.base.membresia;
 
+import com.ipuc.base.persona.Creyente;
 import com.ipuc.base.congregacion.Congregacion;
-import com.ipuc.base.creyente.Creyente;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -26,46 +23,40 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "membresia")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Membresia implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    private String idMembresia;
-
-    private String numFolio;
+    private int idMembresia;
 
     private Date fechaIngreso;
 
-    private Date fechaTranslado;
-
-    private Congregacion congregacion;
+    private Date fechaSalida;
 
     private Creyente creyente;
 
-    private List<Membresia> membresiaList;
+    private Congregacion congregacion;
 
-    private Membresia padreMembresia;
-
-    @Id
-    @Column(name = "id_membresia")
-    @GeneratedValue
-    public String getIdMembresia() {
-        return idMembresia;
+    public Membresia() {
     }
 
-    public void setIdMembresia(String idMembresia) {
+    public Membresia(int idMembresia) {
         this.idMembresia = idMembresia;
     }
 
-    @NotNull
-    @Column(name = "num_folio")
-    public String getNumFolio() {
-        return numFolio;
+    public Membresia(int idMembresia, Date fechaIngreso) {
+        this.idMembresia = idMembresia;
+        this.fechaIngreso = fechaIngreso;
     }
 
-    public void setNumFolio(String numFolio) {
-        this.numFolio = numFolio;
+    @Id
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_membresia")
+    public int getIdMembresia() {
+        return idMembresia;
+    }
+
+    public void setIdMembresia(int idMembresia) {
+        this.idMembresia = idMembresia;
     }
 
     @NotNull
@@ -79,14 +70,24 @@ public class Membresia implements Serializable {
         this.fechaIngreso = fechaIngreso;
     }
 
-    @Column(name = "fecha_translado")
+    @Column(name = "fecha_salida")
     @Temporal(TemporalType.DATE)
-    public Date getFechaTranslado() {
-        return fechaTranslado;
+    public Date getFechaSalida() {
+        return fechaSalida;
     }
 
-    public void setFechaTranslado(Date fechaTranslado) {
-        this.fechaTranslado = fechaTranslado;
+    public void setFechaSalida(Date fechaSalida) {
+        this.fechaSalida = fechaSalida;
+    }
+
+    @JoinColumn(name = "creyente", referencedColumnName = "numero_identificacion")
+    @ManyToOne(optional = false)
+    public Creyente getCreyente() {
+        return creyente;
+    }
+
+    public void setCreyente(Creyente creyente) {
+        this.creyente = creyente;
     }
 
     @JoinColumn(name = "congregacion", referencedColumnName = "cod_congregacion")
@@ -97,35 +98,6 @@ public class Membresia implements Serializable {
 
     public void setCongregacion(Congregacion congregacion) {
         this.congregacion = congregacion;
-    }
-
-    @JoinColumn(name = "creyente", referencedColumnName = "num_identificacion")
-    @ManyToOne(optional = false)
-    public Creyente getCreyente() {
-        return creyente;
-    }
-
-    public void setCreyente(Creyente creyente) {
-        this.creyente = creyente;
-    }
-
-    @OneToMany(mappedBy = "padreMembresia")
-    public List<Membresia> getMembresiaList() {
-        return membresiaList;
-    }
-
-    public void setMembresiaList(List<Membresia> membresiaList) {
-        this.membresiaList = membresiaList;
-    }
-
-    @JoinColumn(name = "padre_membresia", referencedColumnName = "id_membresia")
-    @ManyToOne
-    public Membresia getPadreMembresia() {
-        return padreMembresia;
-    }
-
-    public void setPadreMembresia(Membresia padreMembresia) {
-        this.padreMembresia = padreMembresia;
     }
 
 }

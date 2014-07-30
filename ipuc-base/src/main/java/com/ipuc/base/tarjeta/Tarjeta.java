@@ -1,18 +1,13 @@
 
 package com.ipuc.base.tarjeta;
 
-import com.ipuc.base.historialTarjeta.HistorialTarjeta;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.Length;
 
 /**
  *
@@ -20,58 +15,57 @@ import org.hibernate.validator.NotNull;
  */
 @Entity
 @Table(name = "tarjeta")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Tarjeta implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private String codTarjeta;
 
-    private String idTarjeta;
+    private String nombre;
 
-    private String nombreTarjeta;
-
-    private String descripcion;
-
-    private List<HistorialTarjeta> historialTarjetaList;
-
-    @Id
-    @Column(name = "id_tarjeta")
-    public String getIdTarjeta() {
-        return idTarjeta;
-    }
-
-    public void setIdTarjeta(String idTarjeta) {
-        this.idTarjeta = idTarjeta;
-    }
-
-    @Column(name = "nombre_tarjeta")
-    @NotNull
-    public String getNombreTarjeta() {
-        return nombreTarjeta;
-    }
-
-    public void setNombreTarjeta(String nombreTarjeta) {
-        this.nombreTarjeta = nombreTarjeta;
-    }
-
-    @Column(name = "descripcion")
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    private int orden;
 
     public Tarjeta() {
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tarjeta")
-    public List<HistorialTarjeta> getHistorialTarjetaList() {
-        return historialTarjetaList;
+    public Tarjeta(String codTarjeta) {
+        this.codTarjeta = codTarjeta;
     }
 
-    public void setHistorialTarjetaList(List<HistorialTarjeta> historialTarjetaList) {
-        this.historialTarjetaList = historialTarjetaList;
+    public Tarjeta(String codTarjeta, String nombre, int orden) {
+        this.codTarjeta = codTarjeta;
+        this.nombre = nombre;
+        this.orden = orden;
     }
 
+    @Id
+    @NotNull
+    @Column(name = "cod_tarjeta")
+    public String getCodTarjeta() {
+        return codTarjeta;
+    }
+
+    public void setCodTarjeta(String codTarjeta) {
+        this.codTarjeta = codTarjeta;
+    }
+
+    @NotNull
+    @Length(max = 50)
+    @Column(name = "nombre")
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @NotNull
+    @Column(name = "orden")
+    public int getOrden() {
+        return orden;
+    }
+
+    public void setOrden(int orden) {
+        this.orden = orden;
+    }
+    
 }
