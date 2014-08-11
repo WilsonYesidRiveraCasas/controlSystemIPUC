@@ -27,7 +27,11 @@ public class JPAPersonaManager implements PersonaManager {
     }
 
     public Persona find(String num_identificacion) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return entityManager.find(Persona.class, num_identificacion);
+        } catch (Exception e) {
+            throw new Exception("Exception loading person with identification : " + num_identificacion + ". Message: " + e.getMessage(), e);
+        }
     }
 
     public List<Persona> findAll() throws Exception {

@@ -1,9 +1,9 @@
 
 package com.ipuc.base.congregacion;
 
-import com.ipuc.base.persona.Creyente;
 import com.ipuc.base.membresia.Membresia;
 import com.ipuc.base.municipio.Municipio;
+import com.ipuc.base.persona.Creyente;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.trayectoria.Trayectoria;
 import java.io.Serializable;
@@ -21,7 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
@@ -121,7 +121,7 @@ public class Congregacion implements Serializable {
         this.distrito = distrito;
     }
 
-    @JoinColumn(name = "municipio", referencedColumnName = "idMunicipio")
+    @JoinColumn(name = "municipio", referencedColumnName = "id_municipio")
     @ManyToOne(optional = false)
     public Municipio getMunicipio() {
         return municipio;

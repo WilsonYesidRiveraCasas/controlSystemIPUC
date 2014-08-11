@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
  * @author wilson-rivera
  */
 @Entity
-@PrimaryKeyJoinColumn(name="numeroIdentificacion")
+@PrimaryKeyJoinColumn(name="numero_identificacion")
 public class Creyente extends Persona {
 
     private Date recepEspirituSanto;

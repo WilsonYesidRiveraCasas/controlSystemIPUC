@@ -78,7 +78,7 @@ public class HistorialTarjeta implements Serializable {
         this.tarjeta = tarjeta;
     }
 
-    @JoinColumn(name = "id_identificacion_pastor", referencedColumnName = "numero_identificacion")
+    @JoinColumn(name = "id_identificacion_pastor")
     @ManyToOne(optional = false)
     public Pastor getPastor() {
         return pastor;

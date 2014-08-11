@@ -13,9 +13,7 @@ public class Index {
     
     
     public void index(Request request, Response response) {
-        //response.contentType(ResponseFormat.HTML.getContentType()).render("index.ftl");
-        System.out.println("Llego");
-                
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor.html");                
     }
     
 }

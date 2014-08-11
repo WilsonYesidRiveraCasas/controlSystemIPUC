@@ -22,12 +22,15 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.30</version>
       <type>jar</type>
     </dependency>
+
+    <!-- log4j -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -35,61 +38,103 @@
       <type>jar</type>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.7</version>
+    </dependency>
+    <dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-log4j12</artifactId>
+	<version>1.7.7</version>
+    </dependency>
+
+    <!-- spring framework -->
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>4.0.3.RELEASE</version>
+      <version>4.0.6.RELEASE</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>4.0.3.RELEASE</version>
+      <version>4.0.6.RELEASE</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>4.0.3.RELEASE</version>
+      <version>4.0.6.RELEASE</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>4.0.3.RELEASE</version>
+      <version>4.0.6.RELEASE</version>
       <type>jar</type>
     </dependency>
+
     <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <version>2.1.0</version>
+	<groupId>com.hazelcast</groupId>
+	<artifactId>hazelcast-hibernate4</artifactId>
+	<version>3.2.4</version>
     </dependency>
+    <dependency>
+	<groupId>com.hazelcast</groupId>
+	<artifactId>hazelcast-cloud</artifactId>
+	<version>3.2.4</version>
+    </dependency>
+    <dependency>
+	<groupId>com.hazelcast</groupId>
+	<artifactId>hazelcast-spring</artifactId>
+	<version>3.2.4</version>
+    </dependency>
+
+    <dependency>
+	<groupId>aspectj</groupId>
+	<artifactId>aspectjrt</artifactId>
+	<version>1.5.4</version>
+    </dependency>
+    <dependency>
+	<groupId>aspectj</groupId>
+	<artifactId>aspectjweaver</artifactId>
+	<version>1.5.4</version>
+    </dependency>
+
+    <dependency>
+	<groupId>org.aspectj</groupId>
+	<artifactId>aspectjtools</artifactId>
+	<version>1.6.2</version>
+    </dependency>
+    <dependency>
+	<groupId>commons-dbcp</groupId>
+	<artifactId>commons-dbcp</artifactId>
+	<version>1.2.2</version>
+    </dependency>
+
+
+
+    <!-- hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>4.1.0.Final</version>
-      <type>jar</type>
+      <version>4.3.6.Final</version>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>3.0.0.ga</version>
-      <type>jar</type>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-entitymanager</artifactId>
+       <version>4.3.6.Final</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.6</version>
-      <type>jar</type>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-validator</artifactId>
+       <version>5.1.2.Final</version>
     </dependency>
     <dependency>
-	<groupId>javax.validation</groupId>
-	<artifactId>validation-api</artifactId>
-	<version>1.0.0.GA</version>
+       <groupId>org.jasypt</groupId>
+       <artifactId>jasypt-hibernate4</artifactId>
+       <version>1.9.0</version>
     </dependency>
-    <dependency>
-	<groupId>org.jasypt</groupId>
-	<artifactId>jasypt-hibernate4</artifactId>
-	<version>1.9.0</version>
-    </dependency>
+
   </dependencies>
 </project>

@@ -109,7 +109,7 @@ public class Pastor extends Persona {
         this.trayectoriaCongregacion = trayectoriaCongregacion;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIdentificacionPastor")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pastor")
     public List<HistorialTarjeta> getTarjetas() {
         return tarjetas;
     }

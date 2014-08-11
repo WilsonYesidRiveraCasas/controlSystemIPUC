@@ -15,8 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.Email;
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
@@ -25,7 +25,7 @@ import org.hibernate.validator.Length;
 @Entity
 @Table(name = "persona")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Persona implements Serializable {
+public abstract class Persona implements Serializable {
 
     private String numeroIdentificacion;
 
@@ -53,25 +53,9 @@ public class Persona implements Serializable {
 
     private TipoIdentificacion tipoIdentificacion;
     
-    private Persona padre;
+    private String padre;
     
-    private Persona madre;
-
-    public Persona() {
-    }
-
-    public Persona(String numeroIdentificacion) {
-        this.numeroIdentificacion = numeroIdentificacion;
-    }
-
-    public Persona(String numeroIdentificacion, String primerNombre, String primerApellido, String sexo, Date fechaNacimiento, String estadoCivil) {
-        this.numeroIdentificacion = numeroIdentificacion;
-        this.primerNombre = primerNombre;
-        this.primerApellido = primerApellido;
-        this.sexo = sexo;
-        this.fechaNacimiento = fechaNacimiento;
-        this.estadoCivil = estadoCivil;
-    }
+    private String madre;
 
     @Id
     @NotNull
@@ -210,23 +194,23 @@ public class Persona implements Serializable {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
-    @JoinColumn(name = "padre", referencedColumnName = "numero_identificacion")
-    @ManyToOne
-    public Persona getPadre() {
+    @Length(max = 100)
+    @Column(name = "padre")
+    public String getPadre() {
         return padre;
     }
 
-    public void setPadre(Persona padre) {
+    public void setPadre(String padre) {
         this.padre = padre;
     }
 
-    @JoinColumn(name = "madre", referencedColumnName = "numero_identificacion")
-    @ManyToOne
-    public Persona getMadre() {
+    @Length(max = 100)
+    @Column(name = "madre")
+    public String getMadre() {
         return madre;
     }
 
-    public void setMadre(Persona madre) {
+    public void setMadre(String madre) {
         this.madre = madre;
     }
     
