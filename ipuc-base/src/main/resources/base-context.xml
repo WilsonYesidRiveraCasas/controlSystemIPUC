@@ -24,6 +24,5 @@
     <bean id="regionManager" class="com.ipuc.base.region.JPARegionManager"/>
     <bean id="tarjetaManager" class="com.ipuc.base.tarjeta.JPATarjetaManager"/>
     <bean id="trayectoriaManager" class="com.ipuc.base.trayectoria.JPATrayectoriaManager"/>
-    <bean id="tipoIdentificacionManager" class="com.ipuc.base.tipoIdentificacion.JPATipoIdentificacionManager"/>
 
 </beans>

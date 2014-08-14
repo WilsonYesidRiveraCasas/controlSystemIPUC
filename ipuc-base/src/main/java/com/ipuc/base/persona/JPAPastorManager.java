@@ -1,11 +1,8 @@
 
 package com.ipuc.base.persona;
 
-import com.ipuc.base.pais.Pais;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,16 +41,5 @@ public class JPAPastorManager implements PastorManager {
         }
     }
 
-    public List<Pais> getPaises() throws Exception {
-        try {
-            String jpa = "SELECT u FROM Pais u";
-            Query query = entityManager.createQuery(jpa);
-            List<Pais> paises = query.getResultList();
-            return paises;
-        } catch(Exception e) {
-            log.error("Error loading paises", e);
-            throw e;
-        }
-    }
   
 }
