@@ -4,17 +4,16 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>com.ipuc.base.tarjeta.Tarjeta</class>
     <class>com.ipuc.base.congregacion.Congregacion</class>
-    <class>com.ipuc.base.persona.Persona</class>
-    <class>com.ipuc.base.pastor.Pastor</class>
     <class>com.ipuc.base.historialTarjeta.HistorialTarjeta</class>
     <class>com.ipuc.base.ceremonia.Ceremonia</class>
     <class>com.ipuc.base.trayectoria.Trayectoria</class>
     <class>com.ipuc.base.membresia.Membresia</class>
-    <class>com.ipuc.base.persona.Pastor</class>
+    <class>com.ipuc.base.persona.Persona</class>
     <class>com.ipuc.base.persona.Creyente</class>
     <class>com.ipuc.base.municipio.Municipio</class>
     <class>com.ipuc.base.pais.Pais</class>
     <class>com.ipuc.base.region.Region</class>
     <class>com.ipuc.base.tipoIdentificacion.TipoIdentificacion</class>
+    <class>com.ipuc.base.persona.Pastor</class>
   </persistence-unit>
 </persistence>

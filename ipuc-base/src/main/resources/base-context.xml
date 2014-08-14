@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
     <import resource="persistence-context.xml" />
 
     <context:property-placeholder />
     <bean id="ceremoniaManager" class="com.ipuc.base.ceremonia.JPACeremoniaManager"/>
     <bean id="congregacionManager" class="com.ipuc.base.congregacion.JPACongregacionManager"/>
-    <bean id="creyenteManager" class="com.ipuc.base.creyente.JPACreyenteManager"/>
+    <bean id="creyenteManager" class="com.ipuc.base.persona.JPACreyenteManager"/>
     <bean id="historialTarjetaManager" class="com.ipuc.base.historialTarjeta.JPAHistorialTarjetaManager"/>
     <bean id="membresiaManager" class="com.ipuc.base.membresia.JPAMembresiaManager"/>
-    <bean id="pastorManager" class="com.ipuc.base.pastor.JPAPastorManager"/>
+    <bean id="municipioManager" class="com.ipuc.base.municipio.JPAMunicipioManager"/>
+    <bean id="paisManager" class="com.ipuc.base.pais.JPAPaisManager"/>
+    <bean id="pastorManager" class="com.ipuc.base.persona.JPAPastorManager"/>
     <bean id="personaManager" class="com.ipuc.base.persona.JPAPersonaManager"/>
+    <bean id="regionManager" class="com.ipuc.base.region.JPARegionManager"/>
     <bean id="tarjetaManager" class="com.ipuc.base.tarjeta.JPATarjetaManager"/>
     <bean id="trayectoriaManager" class="com.ipuc.base.trayectoria.JPATrayectoriaManager"/>
+    <bean id="tipoIdentificacionManager" class="com.ipuc.base.tipoIdentificacion.JPATipoIdentificacionManager"/>
 
 </beans>

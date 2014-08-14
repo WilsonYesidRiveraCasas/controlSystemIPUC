@@ -18,8 +18,14 @@ public class JPAPersonaManager implements PersonaManager {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Persona persona) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void create(Persona persona) throws Exception {
+        try {
+            entityManager.persist(persona);
+            entityManager.flush();
+        } catch (Exception e) {
+            log.error("Exception creating person", e);
+            throw e;
+        }
     }
 
     public void update(Persona persona) throws Exception {
@@ -27,7 +33,11 @@ public class JPAPersonaManager implements PersonaManager {
     }
 
     public Persona find(String num_identificacion) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return entityManager.find(Persona.class, num_identificacion);
+        } catch (Exception e) {
+            throw new Exception("Exception loading person with identification : " + num_identificacion + ". Message: " + e.getMessage(), e);
+        }
     }
 
     public List<Persona> findAll() throws Exception {

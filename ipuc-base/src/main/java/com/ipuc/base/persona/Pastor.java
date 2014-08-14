@@ -2,16 +2,18 @@
 package com.ipuc.base.persona;
 
 import com.ipuc.base.historialTarjeta.HistorialTarjeta;
-import com.ipuc.base.congregacion.Congregacion;
 import com.ipuc.base.trayectoria.Trayectoria;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -32,22 +34,42 @@ import org.jasypt.hibernate4.type.EncryptedStringType;
         value = "jasyptEncryptor")
     })
 @Entity
-@PrimaryKeyJoinColumn(name="numeroIdentificacion")
-public class Pastor extends Persona {
-
+@Table(name = "pastor")
+public class Pastor implements Serializable {
+    
+    
+    private String numeroIdentificacion;
+    
     private Date fechaNombramiento;
-
+    
     private String rol;
-
+    
     private String password;
-
+    
     private String estado;
-
-    private Congregacion congregacion;
-
+    
     private List<Trayectoria> trayectoriaCongregacion;
 
+    private Persona persona;
+    
     private List<HistorialTarjeta> tarjetas;
+    
+    public static final String ROL_PASTOR = "PASTOR";
+    
+    public static final String ROL_DIRECTIVO = "DIRECTIVO";
+    
+    public static final String ROL_ADMIN = "ADMIN";
+
+    @Id
+    @NotNull
+    @Column(name = "numero_identificacion")
+    public String getNumeroIdentificacion() {
+        return numeroIdentificacion;
+    }
+
+    public void setNumeroIdentificacion(String numeroIdentificacion) {
+        this.numeroIdentificacion = numeroIdentificacion;
+    }
 
     @NotNull
     @Column(name = "fecha_nombramiento")
@@ -91,15 +113,6 @@ public class Pastor extends Persona {
         this.estado = estado;
     }
 
-    @OneToOne(mappedBy = "pastor")
-    public Congregacion getCongregacion() {
-        return congregacion;
-    }
-
-    public void setCongregacion(Congregacion congregacion) {
-        this.congregacion = congregacion;
-    }
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pastor")
     public List<Trayectoria> getTrayectoriaCongregacion() {
         return trayectoriaCongregacion;
@@ -109,7 +122,17 @@ public class Pastor extends Persona {
         this.trayectoriaCongregacion = trayectoriaCongregacion;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIdentificacionPastor")
+    @JoinColumn(name = "numero_identificacion", referencedColumnName = "numero_identificacion", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pastor")
     public List<HistorialTarjeta> getTarjetas() {
         return tarjetas;
     }

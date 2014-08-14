@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
@@ -84,7 +84,7 @@ public class Region implements Serializable {
         return municipios;
     }
 
-    public void setMunicipioList(List<Municipio> municipios) {
+    public void setMunicipios(List<Municipio> municipios) {
         this.municipios = municipios;
     }
     

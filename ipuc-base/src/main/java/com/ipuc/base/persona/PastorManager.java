@@ -1,6 +1,7 @@
 
 package com.ipuc.base.persona;
 
+import com.ipuc.base.pais.Pais;
 import java.util.List;
 
 /**
@@ -9,11 +10,12 @@ import java.util.List;
  */
 public interface PastorManager {
 
-    public void create(Pastor pastor);
+    public void create(Pastor pastor) throws Exception;
 
     public void update(Pastor pastor) throws Exception;
 
-    public Pastor find(String cod_congregacion) throws Exception;
+    public Pastor find(String num_identificacion) throws Exception;
+    
+    public List<Pais> getPaises() throws Exception;
 
-    public List<Pastor> findAll() throws Exception;
 }

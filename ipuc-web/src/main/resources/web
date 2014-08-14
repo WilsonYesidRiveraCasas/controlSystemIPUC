@@ -2,7 +2,7 @@
 
 APP_NAME="web"
 APP_LONG_NAME="IPUCWeb"
-MAIN_CLASS="com.ipuc.web.server.Server"
+MAIN_CLASS="com.ipuc.web.main.Main"
 
 PIDFILE="/var/run/ipuc-$APP_NAME.pid"
 

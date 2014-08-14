@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface PersonaManager {
 
-    public void create(Persona persona);
+    public void create(Persona persona) throws Exception;
 
     public void update(Persona persona) throws Exception;
 
