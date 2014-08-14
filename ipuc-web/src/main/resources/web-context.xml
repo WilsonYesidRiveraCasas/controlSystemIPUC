@@ -8,12 +8,21 @@
            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
     
     <context:property-placeholder />
+    <!-- Interceptors -->
+    <bean id="exceptionInterceptor" class="com.ipuc.web.interceptor.ExceptionInterceptor"/>
+    <bean id="securityInterceptor" class="com.ipuc.web.interceptor.SecurityInterceptor">
+        <property name="authManager" ref="authManager"/>
+        <property name="pastorManager" ref="pastorManager"/>
+    </bean>
+    
+    <!-- Controllers -->
     <bean id="index" class="com.ipuc.web.controller.Index" />
     <bean id="ministers" class="com.ipuc.web.controller.Ministers">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
     </bean>
     
+    <!-- Jogger Server -->
     <bean id="controllerLoader" class="org.jogger.middleware.router.loader.SpringControllerLoader" />
     <bean id="server" class="com.ipuc.web.server.Server" init-method="initServer">
         <property name="controllerLoader" ref="controllerLoader" />

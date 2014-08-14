@@ -13,7 +13,7 @@
     <class>com.ipuc.base.municipio.Municipio</class>
     <class>com.ipuc.base.pais.Pais</class>
     <class>com.ipuc.base.region.Region</class>
-    <class>com.ipuc.base.tipoIdentificacion.TipoIdentificacion</class>
     <class>com.ipuc.base.persona.Pastor</class>
+    <class>com.ipuc.base.auth.Auth</class>
   </persistence-unit>
 </persistence>

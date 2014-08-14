@@ -54,7 +54,7 @@ public class Ministers {
         pastor.setEstado(form.getStatus());
         pastor.setPersona(persona);
         pastor.setFechaNombramiento(form.getN_date());
-        pastor.setRol(Pastor.ROL_PASTOR);
+        pastor.setRoles(Pastor.ROL_ADMIN);
         
         return pastor;
     }
