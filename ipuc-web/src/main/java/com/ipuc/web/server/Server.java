@@ -57,7 +57,7 @@ public class Server {
         app.setTemplateEngine(new FreemarkerTemplateEngine(freemarker));
     }
 
-    private void setControllerLoader(ControllerLoader controllerLoader) {
+    public void setControllerLoader(ControllerLoader controllerLoader) {
         this.controllerLoader = controllerLoader;
     }
 

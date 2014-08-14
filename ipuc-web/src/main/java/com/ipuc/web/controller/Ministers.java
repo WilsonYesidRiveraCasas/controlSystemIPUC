@@ -1,14 +1,20 @@
 
 package com.ipuc.web.controller;
 
+import com.ipuc.base.pais.Pais;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
+import com.ipuc.base.persona.Persona;
+import com.ipuc.base.persona.PersonaManager;
 import com.ipuc.base.tipoIdentificacion.TipoIdentificacion;
 import com.ipuc.base.tipoIdentificacion.TipoIdentificacionManager;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.MinisterRegisterForm;
 import com.ipuc.web.helper.ResponseFormat;
+import com.ipuc.web.list.SexFormat;
+import java.util.Date;
+import java.util.List;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.slf4j.Logger;
@@ -27,9 +33,12 @@ public class Ministers {
     
     private TipoIdentificacionManager tipoIdentificacionManager;
     
+    private PersonaManager personaManager;
+    
     @Transactional(rollbackFor=Exception.class)
     public void register(Request request, Response response) throws ConflictException, BadRequestException, Exception {
         log.info("Minister register request /register");
+        List<Pais> paises = pastorManager.getPaises();
         MinisterRegisterForm registerForm = MinisterRegisterForm.parse(request);
         Pastor pastorAux = pastorManager.find(registerForm.getN_identificacion());
         
@@ -46,21 +55,40 @@ public class Ministers {
     
     private Pastor buildPastor(MinisterRegisterForm form) throws ConflictException, Exception {
         Pastor pastor = new Pastor();
-        pastor.setTipoIdentificacion(getIdentificationType(form.getT_identification()));
-        pastor.setNumeroIdentificacion(form.getN_identificacion());
-        pastor.setPrimerNombre(form.getP_name());
-        pastor.setSegundoNombre(form.getS_name());
-        pastor.setPrimerApellido(form.getP_lastname());
-        pastor.setSegundoApellido(form.getS_lastname());
-        pastor.setFechaNacimiento(form.getD_birth());
-        pastor.setLugarNacimiento(form.getP_birth());
-        pastor.setEstadoCivil(form.getM_status());
-        pastor.setTelefono(form.getN_phone());
-        pastor.setEmail(form.getMail());
+        Persona persona = createPerson(form);
+        
+        pastor.setNumeroIdentificacion(persona.getNumeroIdentificacion());
         pastor.setPassword(form.getPass());
         pastor.setEstado(form.getStatus());
+        pastor.setPersona(persona);
+        pastor.setFechaNombramiento(form.getN_date());
+        pastor.setRol(Pastor.ROL_PASTOR);
         
         return pastor;
+    }
+    
+    private Persona createPerson (MinisterRegisterForm form) throws ConflictException, Exception {
+        
+        Persona person = new Persona();
+        
+        TipoIdentificacion tipoIdenti = getIdentificationType(form.getT_identification());
+        person.setTipoIdentificacion(tipoIdenti);
+        person.setNumeroIdentificacion(form.getN_identificacion());
+        person.setPrimerNombre(form.getP_name());
+        person.setSegundoNombre(form.getS_name());
+        person.setPrimerApellido(form.getP_lastname());
+        person.setSegundoApellido(form.getS_lastname());
+        person.setFechaNacimiento(form.getD_birth());
+        person.setLugarNacimiento(form.getP_birth());
+        person.setEstadoCivil(form.getM_status());
+        person.setTelefono(form.getN_phone());
+        person.setEmail(form.getMail()); 
+        person.setSexo(SexFormat.M.getCodeSex());
+        
+        personaManager.create(person);
+        
+        return person;
+        
     }
     
     private TipoIdentificacion getIdentificationType(String t_identificaction) throws ConflictException, Exception {
@@ -81,5 +109,9 @@ public class Ministers {
     public void setTipoIdentificacionManager(TipoIdentificacionManager tipoIdentificacionManager) {
         this.tipoIdentificacionManager = tipoIdentificacionManager;
     }
-   
+
+    public void setPersonaManager(PersonaManager personaManager) {
+        this.personaManager = personaManager;
+    }
+
 }

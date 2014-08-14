@@ -8,11 +8,11 @@
            http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
     
     <context:property-placeholder />
-
     <bean id="index" class="com.ipuc.web.controller.Index" />
     <bean id="ministers" class="com.ipuc.web.controller.Ministers">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="tipoIdentificacionManager" ref="tipoIdentificacionManager"/>
+        <property name="personaManager" ref="personaManager"/>
     </bean>
     
     <bean id="controllerLoader" class="org.jogger.middleware.router.loader.SpringControllerLoader" />

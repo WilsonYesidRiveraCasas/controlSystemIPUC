@@ -14,7 +14,6 @@
     <class>com.ipuc.base.pais.Pais</class>
     <class>com.ipuc.base.region.Region</class>
     <class>com.ipuc.base.tipoIdentificacion.TipoIdentificacion</class>
-    <class>com.ipuc.base.persona.Pastor2</class>
     <class>com.ipuc.base.persona.Pastor</class>
   </persistence-unit>
 </persistence>

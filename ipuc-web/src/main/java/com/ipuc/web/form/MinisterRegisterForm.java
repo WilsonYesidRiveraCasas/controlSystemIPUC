@@ -7,6 +7,10 @@
 package com.ipuc.web.form;
 
 import com.ipuc.web.exception.BadRequestException;
+import com.ipuc.web.list.CivilStateFormat;
+import com.ipuc.web.list.IdentificationTypeFormat;
+import com.ipuc.web.list.MinisterStateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.jogger.http.Request;
 import org.json.JSONException;
@@ -48,6 +52,8 @@ public class MinisterRegisterForm {
     
     private String status;
     
+    private Date n_date;
+    
     public static MinisterRegisterForm parse(Request request) throws BadRequestException {
         MinisterRegisterForm register = getRegister(request);
         return register;
@@ -57,33 +63,50 @@ public class MinisterRegisterForm {
         try {
             JSONObject json = new JSONObject(request.getBody().asString());
             MinisterRegisterForm register = new MinisterRegisterForm();
-            register.setT_identification(json.getString("t_identification"));
+            register.setT_identification(validateIdentificationType(json.getString("t_identification")));
             register.setN_identificacion(json.getString("n_identification"));
             register.setP_name(json.getString("p_name"));
             register.setS_name(json.getString("s_name"));
             register.setP_lastname(json.getString("p_lastname"));
             register.setS_lastname(json.getString("s_lastname"));
-            register.setD_birth(new Date());
+            register.setD_birth(new SimpleDateFormat("yyyy-MM-dd").parse(json.getString("d_birth")));
             register.setP_birth(json.getString("p_birth"));
-            register.setM_status(json.getString("m_status"));
+            register.setM_status(validateCivilState(json.getString("m_status")));
             register.setN_phone(json.getString("n_phone"));
             register.setMail(json.getString("mail"));
             register.setPass(json.getString("pass"));
-            register.setStatus(json.getString("status"));
+            register.setStatus(validateMinisterState(json.getString("status")));
+            register.setN_date(new SimpleDateFormat("yyyy-MM-dd").parse(json.getString("n_date")));
             
             return register;
-        } catch(JSONException e) {
+        } catch(Exception e) {
             log.error("Error parsing MinisterRegisterForm. Message: " + e.getMessage());
             throw new BadRequestException("\"Error parsing MinisterRegisterForm\"");
         }
     }
-
-    public static Logger getLog() {
-        return log;
+    
+    private static String validateIdentificationType(String identificationTypeCode) throws BadRequestException {
+        boolean isValid = IdentificationTypeFormat.isValidCode(identificationTypeCode);
+        if(!isValid) {
+            throw new BadRequestException("Identification type invalid");
+        }
+        return identificationTypeCode;        
     }
-
-    public static void setLog(Logger log) {
-        MinisterRegisterForm.log = log;
+    
+    private static String validateCivilState(String civilState) throws BadRequestException {
+        boolean isValid = CivilStateFormat.isValidStateCivil(civilState);
+        if(!isValid) {
+            throw new BadRequestException("Civil state invalid");
+        }
+        return civilState;
+    }
+    
+    private static String validateMinisterState(String codeMinisterState) throws BadRequestException {
+        boolean isValid = MinisterStateFormat.isValidState(codeMinisterState);
+        if(!isValid) {
+            throw new BadRequestException("Minister state invalid");
+        }
+        return codeMinisterState;
     }
 
     public String getT_identification() {
@@ -188,6 +211,14 @@ public class MinisterRegisterForm {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getN_date() {
+        return n_date;
+    }
+
+    public void setN_date(Date n_date) {
+        this.n_date = n_date;
     }
     
     

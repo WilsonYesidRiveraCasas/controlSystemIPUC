@@ -7,8 +7,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -24,8 +22,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "persona")
-@Inheritance(strategy=InheritanceType.JOINED)
-public abstract class Persona implements Serializable {
+public class Persona implements Serializable {
 
     private String numeroIdentificacion;
 

@@ -13,7 +13,8 @@ $(function() {
 		var n_phone = $('#n_phone').val();
 		var mail = $('#mail').val();
 		var pass = $('#pass').val();
-		var status = "A";
+		var status = $('#state').val();
+		var n_date = $('#n_date').val();
 
 		var data = { 
 				t_identification : identification, 
@@ -28,7 +29,8 @@ $(function() {
 				n_phone : n_phone,
 				mail : mail,
 				pass : pass,
-				status : status
+				status : status,
+				n_date : n_date
 			};
 
 		$.ajax({
