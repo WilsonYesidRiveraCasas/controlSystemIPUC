@@ -7,13 +7,11 @@
 package com.ipuc.web.server;
 
 import com.ipuc.web.interceptor.ExceptionInterceptor;
-
+import com.ipuc.web.interceptor.SecurityInterceptor;
 import freemarker.template.Configuration;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-
 import org.jogger.Jogger;
 import org.jogger.middleware.router.RouterMiddleware;
 import org.jogger.middleware.router.interceptor.Interceptor;
@@ -41,7 +39,9 @@ public class Server {
         StaticMiddleware statik = new StaticMiddleware("static");
 
         Interceptor exceptionInterceptor = new ExceptionInterceptor();
+        Interceptor securityInterceptor = new SecurityInterceptor();
         router.addInterceptor(exceptionInterceptor);
+        router.addInterceptor(securityInterceptor);
 
         Jogger app = new Jogger(statik, router);
 

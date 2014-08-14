@@ -42,7 +42,7 @@ public class Pastor implements Serializable {
     
     private Date fechaNombramiento;
     
-    private String rol;
+    private String roles;
     
     private String password;
     
@@ -84,12 +84,20 @@ public class Pastor implements Serializable {
 
     @NotNull
     @Column(name = "rol")
-    public String getRol() {
-        return rol;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRoles(String rol) {
+        if(!rol.equals(Pastor.ROL_PASTOR)) {
+            if(rol.equals(Pastor.ROL_ADMIN)) {
+                this.roles = Pastor.ROL_PASTOR + "," + Pastor.ROL_DIRECTIVO + "," + Pastor.ROL_ADMIN;
+            } else {
+                this.roles = Pastor.ROL_PASTOR + "," + Pastor.ROL_DIRECTIVO;
+            }
+        } else {
+            this.roles = rol;
+        }
     }
 
     @NotNull
