@@ -1,20 +1,15 @@
 
 package com.ipuc.web.controller;
 
-import com.ipuc.base.pais.Pais;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.base.persona.Persona;
 import com.ipuc.base.persona.PersonaManager;
-import com.ipuc.base.tipoIdentificacion.TipoIdentificacion;
-import com.ipuc.base.tipoIdentificacion.TipoIdentificacionManager;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.MinisterRegisterForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.list.SexFormat;
-import java.util.Date;
-import java.util.List;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.slf4j.Logger;
@@ -31,14 +26,11 @@ public class Ministers {
     
     private PastorManager pastorManager;
     
-    private TipoIdentificacionManager tipoIdentificacionManager;
-    
     private PersonaManager personaManager;
     
     @Transactional(rollbackFor=Exception.class)
     public void register(Request request, Response response) throws ConflictException, BadRequestException, Exception {
         log.info("Minister register request /register");
-        List<Pais> paises = pastorManager.getPaises();
         MinisterRegisterForm registerForm = MinisterRegisterForm.parse(request);
         Pastor pastorAux = pastorManager.find(registerForm.getN_identificacion());
         
@@ -71,8 +63,7 @@ public class Ministers {
         
         Persona person = new Persona();
         
-        TipoIdentificacion tipoIdenti = getIdentificationType(form.getT_identification());
-        person.setTipoIdentificacion(tipoIdenti);
+        person.setTipoIdentificacion(form.getT_identification());
         person.setNumeroIdentificacion(form.getN_identificacion());
         person.setPrimerNombre(form.getP_name());
         person.setSegundoNombre(form.getS_name());
@@ -91,23 +82,8 @@ public class Ministers {
         
     }
     
-    private TipoIdentificacion getIdentificationType(String t_identificaction) throws ConflictException, Exception {
-        
-        TipoIdentificacion identificactionType = tipoIdentificacionManager.find(t_identificaction);
-        
-        if(identificactionType == null) {
-            throw new ConflictException("El tipo de identificación no es válido.");
-        }
-        
-        return identificactionType;
-    }
-
     public void setPastorManager(PastorManager pastorManager) {
         this.pastorManager = pastorManager;
-    }
-
-    public void setTipoIdentificacionManager(TipoIdentificacionManager tipoIdentificacionManager) {
-        this.tipoIdentificacionManager = tipoIdentificacionManager;
     }
 
     public void setPersonaManager(PersonaManager personaManager) {

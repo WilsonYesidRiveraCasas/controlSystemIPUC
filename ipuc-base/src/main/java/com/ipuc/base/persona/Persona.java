@@ -1,14 +1,11 @@
 
 package com.ipuc.base.persona;
 
-import com.ipuc.base.tipoIdentificacion.TipoIdentificacion;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,7 +45,7 @@ public class Persona implements Serializable {
 
     private String foto;
 
-    private TipoIdentificacion tipoIdentificacion;
+    private String tipoIdentificacion;
     
     private String padre;
     
@@ -181,13 +178,14 @@ public class Persona implements Serializable {
         this.foto = foto;
     }
 
-    @JoinColumn(name = "tipo_identificacion", referencedColumnName = "cod_tipo_identificacion")
-    @ManyToOne(optional = false)
-    public TipoIdentificacion getTipoIdentificacion() {
+    @Length(max = 6)
+    @NotNull
+    @Column(name = "tipo_identificacion")
+    public String getTipoIdentificacion() {
         return tipoIdentificacion;
     }
 
-    public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
+    public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
