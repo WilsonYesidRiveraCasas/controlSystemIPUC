@@ -17,4 +17,6 @@ public interface AuthManager {
 
     public List<Auth> findAll() throws Exception;
     
+    public Auth findBySession(String n_identification, String session_id) throws Exception;
+    
 }

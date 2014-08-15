@@ -9,7 +9,13 @@ import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.MinisterRegisterForm;
 import com.ipuc.web.helper.ResponseFormat;
+import com.ipuc.web.list.CivilStateFormat;
+import com.ipuc.web.list.IdentificationTypeFormat;
+import com.ipuc.web.list.MinisterStateFormat;
 import com.ipuc.web.list.SexFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.slf4j.Logger;
@@ -27,6 +33,19 @@ public class Ministers {
     private PastorManager pastorManager;
     
     private PersonaManager personaManager;
+    
+    public void registerForm(Request request, Response response) {
+        
+        List<IdentificationTypeFormat> identificationTypes = IdentificationTypeFormat.getIdentificationTypes();
+        List<CivilStateFormat> civilStates = CivilStateFormat.getStatesCivil();
+        List<MinisterStateFormat> ministerStates = MinisterStateFormat.getStates();
+        
+        Map<String, Object> info = new HashMap<String, Object>();
+        info.put("identificationTypes", identificationTypes);
+        info.put("civilStates", civilStates);
+        info.put("ministerStates", ministerStates);
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor.ftl", info);
+    }
     
     @Transactional(rollbackFor=Exception.class)
     public void register(Request request, Response response) throws ConflictException, BadRequestException, Exception {
