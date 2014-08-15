@@ -12,6 +12,8 @@ public interface AuthManager {
     public void create(Auth auth) throws Exception;
 
     public void update(Auth auth) throws Exception;
+    
+    public void delete(String n_identification) throws Exception;
 
     public Auth find(String num_identificacion) throws Exception;
 

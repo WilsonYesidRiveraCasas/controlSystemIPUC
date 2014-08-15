@@ -27,6 +27,10 @@ import org.jogger.template.FreemarkerTemplateEngine;
 public class Server {
 
     private ControllerLoader controllerLoader;
+    
+    private SecurityInterceptor securityInterceptor;
+    
+    private ExceptionInterceptor exceptionInterceptor;
 
     public void initServer() throws ParseException, InterruptedException, IOException {
 
@@ -38,8 +42,6 @@ public class Server {
 
         StaticMiddleware statik = new StaticMiddleware("static");
 
-        Interceptor exceptionInterceptor = new ExceptionInterceptor();
-        Interceptor securityInterceptor = new SecurityInterceptor();
         router.addInterceptor(exceptionInterceptor);
         router.addInterceptor(securityInterceptor);
 
@@ -59,6 +61,14 @@ public class Server {
 
     public void setControllerLoader(ControllerLoader controllerLoader) {
         this.controllerLoader = controllerLoader;
+    }
+
+    public void setSecurityInterceptor(SecurityInterceptor securityInterceptor) {
+        this.securityInterceptor = securityInterceptor;
+    }
+
+    public void setExceptionInterceptor(ExceptionInterceptor exceptionInterceptor) {
+        this.exceptionInterceptor = exceptionInterceptor;
     }
 
 }
