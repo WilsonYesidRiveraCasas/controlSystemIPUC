@@ -28,9 +28,9 @@ public class ExceptionHandler {
             renderBadRequestException(response);
         } /*else if(e instanceof NotSendMailException) {
             renderNotSendMailException(request, response, e);
-        } else {
+        } */else {
             renderUnExpected(request, response, e);
-        }*/
+        }
     }
 
     private void renderNotSendMailException(Request request, Response response, Exception e) {
@@ -50,9 +50,9 @@ public class ExceptionHandler {
     }
 
     private void renderUnExpected(Request request, Response response, Exception e) {
-      /*  log.error(e.getMessage());
+        log.error(e.getMessage());
         e.printStackTrace();
-        response.status(500).contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(500));*/
+    //    response.status(500).contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(500));
     }
     
     private Map<String,Object> buildHashStateCodeHTTP(int code) {

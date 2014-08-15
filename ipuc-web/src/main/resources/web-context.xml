@@ -11,12 +11,12 @@
     <!-- Interceptors -->
     <bean id="exceptionInterceptor" class="com.ipuc.web.interceptor.ExceptionInterceptor"/>
     <bean id="securityInterceptor" class="com.ipuc.web.interceptor.SecurityInterceptor">
-        <property name="authManager" ref="authManager"/>
         <property name="pastorManager" ref="pastorManager"/>
+        <property name="authManager" ref="authManager"/>
     </bean>
     
     <!-- Controllers -->
-    <bean id="index" class="com.ipuc.web.controller.Index" />
+    <bean id="index" class="com.ipuc.web.controller.Index"/>
     <bean id="ministers" class="com.ipuc.web.controller.Ministers">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
@@ -30,5 +30,7 @@
     <bean id="controllerLoader" class="org.jogger.middleware.router.loader.SpringControllerLoader" />
     <bean id="server" class="com.ipuc.web.server.Server" init-method="initServer">
         <property name="controllerLoader" ref="controllerLoader" />
+        <property name="securityInterceptor" ref="securityInterceptor"/>
+        <property name="exceptionInterceptor" ref="exceptionInterceptor"/>
     </bean>
 </beans>

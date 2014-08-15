@@ -5,6 +5,7 @@ import com.ipuc.base.auth.Auth;
 import com.ipuc.base.auth.AuthManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
+import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.form.LoginForm;
 import com.ipuc.web.helper.ResponseFormat;
@@ -19,9 +20,9 @@ import org.jogger.http.Response;
  */
 public class Login {
     
-    public static final String COOKIE_USER_NAME = "ipuc.n_identification";
+    public static final String COOKIE_N_IDENTIFICATION = "ipuc.n_identification";
 
-    public static final String COOKIE_SESSION_NAME = "ipuc.session_id";
+    public static final String COOKIE_SESSION_ID = "ipuc.session_id";
     
     private PastorManager pastorManager;
     
@@ -37,6 +38,16 @@ public class Login {
         } else {
             response.unauthorized().contentType(contentType).write("{\"status\" : \"invalid\"}");
         }
+    }
+    
+    @Secured
+    public void logout(Request request, Response response) throws Exception{
+       
+        Cookie n_identification = request.getCookie(COOKIE_N_IDENTIFICATION);
+        authManager.delete(n_identification.getValue());
+        response.removeCookie(request.getCookie(COOKIE_SESSION_ID));
+        response.removeCookie(n_identification);
+        response.redirect("/");
     }
     
     private void createSession(Response response, String n_identification) throws Exception {
@@ -58,8 +69,8 @@ public class Login {
     }
     
     private static void setCookiesToResponse(Response response, String n_identification, String session_id) {
-        response.setCookie(new Cookie(COOKIE_USER_NAME, n_identification, Auth.TIME_LIFE, "/"));
-        response.setCookie(new Cookie(COOKIE_SESSION_NAME, session_id, Auth.TIME_LIFE, "/"));
+        response.setCookie(new Cookie(COOKIE_N_IDENTIFICATION, n_identification, Auth.TIME_LIFE, "/"));
+        response.setCookie(new Cookie(COOKIE_SESSION_ID, session_id, Auth.TIME_LIFE, "/"));
     }
         
     private boolean isValidPastor(String num_identification, String pass) throws Exception {
@@ -67,7 +78,6 @@ public class Login {
         if(pastor == null) {
             return false;
         }
-        
         return pastor.getPassword().equals(pass);       
     }
 

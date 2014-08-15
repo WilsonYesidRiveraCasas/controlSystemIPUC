@@ -66,5 +66,16 @@ public class JPAAuthManager implements AuthManager {
         }
         
     }
+
+    @Transactional
+    public void delete(String n_identification) throws Exception {
+        try {
+            Auth auth = find(n_identification);
+            entityManager.remove(auth);
+            entityManager.flush();
+        } catch(Exception e) {
+            throw new Exception("Error deleting auth. Message: " + e.getMessage());
+        }
+    }
     
 }

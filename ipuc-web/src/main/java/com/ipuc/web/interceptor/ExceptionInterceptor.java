@@ -19,6 +19,6 @@ public class ExceptionInterceptor implements Interceptor {
         } catch (Exception e) {
             new ExceptionHandler().handle(e, request, response);
         }
-    }
+    } 
 
 }

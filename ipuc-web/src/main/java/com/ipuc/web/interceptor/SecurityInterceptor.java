@@ -31,6 +31,7 @@ public class SecurityInterceptor implements Interceptor {
     @Override
     public void intercept(Request request, Response response, InterceptorExecution execution) throws Exception {
         
+
         boolean requireAuth = requiresAuthentication(execution);
         if(requireAuth) {
             manageDataPastorToReponse(request, response);
@@ -56,8 +57,8 @@ public class SecurityInterceptor implements Interceptor {
         Pastor pastor = pastorManager.find(auth.getNumeroIdentificacion());
         
         if(pastor == null) {
-            response.removeCookie(new Cookie(Login.COOKIE_USER_NAME, null));
-            response.removeCookie(new Cookie(Login.COOKIE_SESSION_NAME, null));
+            response.removeCookie(new Cookie(Login.COOKIE_N_IDENTIFICATION, null));
+            response.removeCookie(new Cookie(Login.COOKIE_SESSION_ID, null));
             response.redirect("/");
         }
         
@@ -66,12 +67,12 @@ public class SecurityInterceptor implements Interceptor {
     }
     
     private Auth getAuth(Request request) throws NotFoundException, Exception {
-        Cookie n_identification = request.getCookie(Login.COOKIE_USER_NAME);
+        Cookie n_identification = request.getCookie(Login.COOKIE_N_IDENTIFICATION);
         if(n_identification == null) {
             return null;
         }
 
-        Cookie sessionId = request.getCookie(Login.COOKIE_SESSION_NAME);
+        Cookie sessionId = request.getCookie(Login.COOKIE_SESSION_ID);
         if(sessionId == null) {
             return null;
         }
