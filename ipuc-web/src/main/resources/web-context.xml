@@ -21,6 +21,10 @@
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
     </bean>
+    <bean id="login" class="com.ipuc.web.controller.Login">
+        <property name="pastorManager" ref="pastorManager"/>
+        <property name="authManager" ref="authManager"/>
+    </bean>
     
     <!-- Jogger Server -->
     <bean id="controllerLoader" class="org.jogger.middleware.router.loader.SpringControllerLoader" />

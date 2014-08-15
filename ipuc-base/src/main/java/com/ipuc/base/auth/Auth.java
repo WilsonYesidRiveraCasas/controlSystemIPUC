@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
 @Table(name = "auth")
 public class Auth implements Serializable {
 
+    public static final int TIME_LIFE = 172800;
     
     private String numeroIdentificacion;
     

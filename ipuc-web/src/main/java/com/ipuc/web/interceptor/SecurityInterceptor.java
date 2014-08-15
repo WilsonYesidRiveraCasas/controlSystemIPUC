@@ -6,7 +6,9 @@ import com.ipuc.base.auth.AuthManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.web.annotation.Secured;
+import com.ipuc.web.controller.Login;
 import org.jogger.exception.NotFoundException;
+import org.jogger.http.Cookie;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.jogger.middleware.router.interceptor.Interceptor;
@@ -32,7 +34,7 @@ public class SecurityInterceptor implements Interceptor {
         boolean requireAuth = requiresAuthentication(execution);
         if(requireAuth) {
             manageDataPastorToReponse(request, response);
-            manageSecuredRequest(request, response, execution);
+            manageSecuredRequest(response, execution);
         } else {
             execution.proceed();
         }
@@ -54,7 +56,8 @@ public class SecurityInterceptor implements Interceptor {
         Pastor pastor = pastorManager.find(auth.getNumeroIdentificacion());
         
         if(pastor == null) {
-            //eliminar las cookies
+            response.removeCookie(new Cookie(Login.COOKIE_USER_NAME, null));
+            response.removeCookie(new Cookie(Login.COOKIE_SESSION_NAME, null));
             response.redirect("/");
         }
         
@@ -62,18 +65,18 @@ public class SecurityInterceptor implements Interceptor {
         
     }
     
-    private Auth getAuth(Request request) throws NotFoundException {
-        /*Cookie user = request.getCookie(Login.COOKIE_USER_NAME);
-        if(user == null) {
+    private Auth getAuth(Request request) throws NotFoundException, Exception {
+        Cookie n_identification = request.getCookie(Login.COOKIE_USER_NAME);
+        if(n_identification == null) {
             return null;
         }
 
         Cookie sessionId = request.getCookie(Login.COOKIE_SESSION_NAME);
         if(sessionId == null) {
             return null;
-        }*/
+        }
 
-        Auth auth = null;//authManager.findBySession(user.getValue(), sessionId.getValue());
+        Auth auth = authManager.findBySession(n_identification.getValue(), sessionId.getValue());
         
         if(auth == null) {
             throw new NotFoundException();
@@ -82,7 +85,7 @@ public class SecurityInterceptor implements Interceptor {
         return auth;
     }
     
-    private void manageSecuredRequest(Request request, Response response, InterceptorExecution execution) throws Exception {
+    private void manageSecuredRequest(Response response, InterceptorExecution execution) throws Exception {
         Pastor pastor = (Pastor) response.getAttributes().get("pastor");
 
         if (pastor == null) {
