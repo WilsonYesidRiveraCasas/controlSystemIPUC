@@ -58,7 +58,7 @@ public class Pastor implements Serializable {
     
     public static final String ROL_DIRECTIVO = "DIRECTIVO";
     
-    public static final String ROL_ADMIN = "ADMIN";
+    public static final String ROL_CONSISTORIO = "CONSISTORIO";
 
     @Id
     @NotNull
@@ -83,15 +83,15 @@ public class Pastor implements Serializable {
     }
 
     @NotNull
-    @Column(name = "rol")
+    @Column(name = "roles")
     public String getRoles() {
         return roles;
     }
 
     public void setRoles(String rol) {
         if(!rol.equals(Pastor.ROL_PASTOR)) {
-            if(rol.equals(Pastor.ROL_ADMIN)) {
-                this.roles = Pastor.ROL_PASTOR + "," + Pastor.ROL_DIRECTIVO + "," + Pastor.ROL_ADMIN;
+            if(rol.equals(Pastor.ROL_CONSISTORIO)) {
+                this.roles = Pastor.ROL_PASTOR + "," + Pastor.ROL_DIRECTIVO + "," + Pastor.ROL_CONSISTORIO;
             } else {
                 this.roles = Pastor.ROL_PASTOR + "," + Pastor.ROL_DIRECTIVO;
             }
@@ -149,4 +149,26 @@ public class Pastor implements Serializable {
         this.tarjetas = tarjetas;
     }
     
+    public String nombreApellido() {
+        return this.getPersona().getPrimerNombre() + " " + this.getPersona().getPrimerApellido();
+    }
+    
+    public boolean esDirectivo() {
+        return roles.contains(ROL_DIRECTIVO);
+    }
+    
+    public boolean esConsistorio() {
+        return roles.contains(ROL_CONSISTORIO);
+    }
+    
+    public String rolMasImportante() {
+        String [] separatedRoles = roles.split(",");
+        
+        switch(separatedRoles.length) {
+            case 1 : return ROL_PASTOR;
+            case 2 : return ROL_DIRECTIVO;
+            case 3 : return ROL_CONSISTORIO;
+            default : return "UNDEFINED";
+        }
+    }
 }

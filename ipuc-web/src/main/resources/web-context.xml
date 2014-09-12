@@ -16,7 +16,11 @@
     </bean>
     
     <!-- Controllers -->
-    <bean id="index" class="com.ipuc.web.controller.Index"/>
+    <bean id="index" class="com.ipuc.web.controller.Index">
+        <property name="congregacionManager" ref="congregacionManager"/>
+        <property name="pastorManager" ref="pastorManager"/>
+        <property name="creyenteManager" ref="creyenteManager"/>
+    </bean>
     <bean id="ministers" class="com.ipuc.web.controller.Ministers">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
@@ -24,6 +28,10 @@
     <bean id="login" class="com.ipuc.web.controller.Login">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="authManager" ref="authManager"/>
+    </bean>
+    <bean id="directives" class="com.ipuc.web.controller.Directives">
+        <property name="pastorManager" ref="pastorManager"/>
+        <property name="personaManager" ref="personaManager"/>
     </bean>
     
     <!-- Jogger Server -->

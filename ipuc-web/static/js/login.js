@@ -5,6 +5,17 @@ $(function() {
 		$("#msg").html("");
 		$("#msg").hide();
 		executeLogin();
+		return false;
+		
+	});
+
+	('#login').on('vclick', function() {
+		alert('capturado');
+
+		$("#msg").html("");
+		$("#msg").hide();
+		executeLogin();
+		return false;
 		
 	});
 
@@ -38,7 +49,7 @@ $(function() {
 				    }
 				}
 			}).done(function( msg ) {
-			    window.location.href =  "/register";
+			    window.location.href =  "/home";
 			});
 		}
 	};
