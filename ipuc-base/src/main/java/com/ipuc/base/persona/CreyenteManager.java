@@ -21,5 +21,7 @@ public interface CreyenteManager {
     public Creyente find(String num_identificacion) throws Exception;
 
     public List<Creyente> findAll() throws Exception;
+    
+    public long countCreyentes() throws Exception;
 
 }

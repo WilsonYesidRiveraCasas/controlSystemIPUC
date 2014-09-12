@@ -44,6 +44,8 @@ public class Persona implements Serializable {
     private String email;
 
     private String foto;
+    
+    private String foto_min;
 
     private String tipoIdentificacion;
     
@@ -158,6 +160,7 @@ public class Persona implements Serializable {
         this.estadoCivil = estadoCivil;
     }
 
+    @NotNull
     @Email
     @Column(name = "email")
     public String getEmail() {
@@ -168,7 +171,7 @@ public class Persona implements Serializable {
         this.email = email;
     }
 
-    @Length(max = 100)
+    @Length(max = 500)
     @Column(name = "foto")
     public String getFoto() {
         return foto;
@@ -178,6 +181,16 @@ public class Persona implements Serializable {
         this.foto = foto;
     }
 
+    @Length(max = 500)
+    @Column(name = "foto_min")
+    public String getFoto_min() {
+        return foto_min;
+    }
+
+    public void setFoto_min(String foto_min) {
+        this.foto_min = foto_min;
+    }
+    
     @Length(max = 6)
     @NotNull
     @Column(name = "tipo_identificacion")

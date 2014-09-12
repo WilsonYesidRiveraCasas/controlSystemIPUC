@@ -3,6 +3,7 @@ package com.ipuc.base.persona;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,15 @@ public class JPAPastorManager implements PastorManager {
             throw new Exception("Exception loading pastor with identification : " + num_identificacion + ". Message: " + e.getMessage(), e);
         }
     }
-
+    
+    public long countPastores() throws Exception {
+        try {
+            String strQuery = "select count(p) from Pastor p";
+            Query query = entityManager.createQuery(strQuery);
+            return (Long) query.getSingleResult();
+        } catch(Exception e) {
+            throw new Exception("Error count pastores. " + e.getMessage());
+        }
+    }
   
 }

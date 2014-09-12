@@ -9,8 +9,10 @@ package com.ipuc.base.congregacion;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,6 +39,17 @@ public class JPACongregacionManager implements CongregacionManager {
 
     public List<Congregacion> findAll() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Transactional
+    public long countCongregacion() throws Exception {
+        try {
+            String strQuery = "select count(c) from Congregacion c";
+            Query query = entityManager.createQuery(strQuery);
+            return (Long) query.getSingleResult();
+        } catch(Exception e) {
+            throw new Exception("Error count congregations. " + e.getMessage());
+        }
     }
     
 }

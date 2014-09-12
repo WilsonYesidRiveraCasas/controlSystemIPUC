@@ -79,7 +79,7 @@
 						<div class="form-group mb-lg">
 							<div class="text-right">
 								<button id="login" class="btn btn-primary hidden-xs">Ingresar</button>
-								<button id="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">Ingresar</button>
+								<button id="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">Ingresar</button>								
 							</div>
 						</div>
 					</div>
@@ -95,8 +95,6 @@
 		<script src="../static/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
 		<script src="../static/assets/vendor/bootstrap/js/bootstrap.js"></script>
 		<script src="../static/assets/vendor/nanoscroller/nanoscroller.js"></script>
-		<script src="../static/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script src="../static/assets/vendor/magnific-popup/magnific-popup.js"></script>
 		<script src="../static/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
 		
 		<!-- Theme Base, Components and Settings -->

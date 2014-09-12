@@ -12,5 +12,7 @@ public interface PastorManager {
     public void update(Pastor pastor) throws Exception;
 
     public Pastor find(String num_identificacion) throws Exception;
+    
+    public long countPastores() throws Exception;
 
 }

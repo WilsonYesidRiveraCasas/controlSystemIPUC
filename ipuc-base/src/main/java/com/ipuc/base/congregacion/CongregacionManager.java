@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.ipuc.base.congregacion;
 
@@ -21,5 +16,7 @@ public interface CongregacionManager {
     public Congregacion find(String cod_congregacion) throws Exception;
 
     public List<Congregacion> findAll() throws Exception;
+    
+    public long countCongregacion() throws Exception;
 
 }
