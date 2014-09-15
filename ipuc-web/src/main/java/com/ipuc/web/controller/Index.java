@@ -31,7 +31,7 @@ public class Index {
     public void loginForm(Request request, Response response) {
         Cookie n_identification = request.getCookie(COOKIE_N_IDENTIFICATION);
         if(n_identification != null) {
-            response.redirect("/register");
+            response.redirect("/home");
         } else{
             Map<String, Object> info = new HashMap<String, Object>();
             info.put("fecha", getYear());

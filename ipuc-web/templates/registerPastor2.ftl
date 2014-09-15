@@ -5,7 +5,7 @@
 </#macro>
 
 
-<@layout.layout_base_modico stylesheets=stylesheets javascripts=javascripts title="Registro de Pastores" section="Registro de Pastores" sectionmin="registerPastor">
+<@layout.layout_base_modico stylesheets=stylesheets javascripts=javascripts title="Registro de Pastores" section="Registro de Pastores" sectionmin="registerpastor">
 
 <section class="panel">
 	<header class="panel-heading">

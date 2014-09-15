@@ -2,10 +2,14 @@
 package com.ipuc.web.controller;
 
 import com.ipuc.base.mail.MailService;
+import com.ipuc.base.municipio.Municipio;
+import com.ipuc.base.municipio.MunicipioManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.base.persona.Persona;
 import com.ipuc.base.persona.PersonaManager;
+import com.ipuc.base.region.Region;
+import com.ipuc.base.region.RegionManager;
 import com.ipuc.base.util.TemplateProcessor;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
@@ -25,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +43,15 @@ public class Directives {
     
     private static final Logger log = LoggerFactory.getLogger(Directives.class);
     
+    private static final String COD_PAIS_DEFAULT = "CO";
+    
     private PastorManager pastorManager;
     
     private PersonaManager personaManager;
+    
+    private RegionManager regionManager;
+    
+    private MunicipioManager municipioManager;
    
     @Secured(role=Pastor.ROL_DIRECTIVO)
     public void registerForm(Request request, Response response) {
@@ -69,6 +81,23 @@ public class Directives {
         sendMail(pastor.getPersona().getEmail(), pastor.getPersona().getNumeroIdentificacion());
        
        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
+    }
+    
+    @Secured(role=Pastor.ROL_DIRECTIVO)
+    public void registerCongregacion(Request request, Response response) {
+        
+    }
+    
+    @Secured(role=Pastor.ROL_DIRECTIVO)
+    public void getMunicipios(Request request, Response response) throws ConflictException, Exception {
+        
+        JSONObject json = new JSONObject(request.getBody().asString());
+        int idRegion = json.getInt("codRegion");
+        List<Municipio> municipios = municipioManager.getMunicipioByCodRegion(idRegion);
+        if(municipios == null || municipios.isEmpty()) {
+            throw new ConflictException("No se encontraron municipios, región inválida");
+        }
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponseMunicipios(municipios));
     }
     
     private Pastor buildPastor(MinisterRegisterForm form) throws ConflictException, Exception {
@@ -109,6 +138,16 @@ public class Directives {
         
     }
     
+    private List<Region> getRegiones() throws Exception {
+        List<Region> regiones = regionManager.getRegionByPais(COD_PAIS_DEFAULT);
+        if(regiones == null || regiones.isEmpty()) {
+            throw new ConflictException("No se encontraron regiones, país no contemplado");
+        }
+        return regiones;
+    }
+    
+    
+    
     private void sendMail(String correo, String num_identificacion) throws TemplateException, IOException, Exception {
         
         List<String> to = new ArrayList<String>();
@@ -124,6 +163,20 @@ public class Directives {
         
     }
     
+    private String getResponseMunicipios(List<Municipio> municipios) {
+        
+        JSONArray municipiosJson = new JSONArray();
+        
+        for(Municipio m : municipios) {
+            JSONObject obj = new JSONObject();
+            obj.put("codMunicipio", m.getIdMunicipio());
+            obj.put("nombre", m.getNombre());
+            municipiosJson.put(obj);
+        }
+        
+        return municipiosJson.toString();
+    }
+    
     private Pastor getPastorFromResponse(Response response){
         Map<String, Object> atributes = response.getAttributes();
         Pastor pastor = (Pastor) atributes.get("pastor");
@@ -137,4 +190,13 @@ public class Directives {
     public void setPersonaManager(PersonaManager personaManager) {
         this.personaManager = personaManager;
     }
+
+    public void setRegionManager(RegionManager regionManager) {
+        this.regionManager = regionManager;
+    }
+
+    public void setMunicipioManager(MunicipioManager municipioManager) {
+        this.municipioManager = municipioManager;
+    }
+          
 }

@@ -9,12 +9,8 @@ import java.util.List;
  */
 public interface RegionManager {
 
-    public void create(Region region);
-
-    public void update(Region region) throws Exception;
-
     public Region find(int id_region) throws Exception;
-
-    public List<Region> findAll() throws Exception;
+    
+    public List<Region> getRegionByPais(String codPais) throws Exception;
     
 }

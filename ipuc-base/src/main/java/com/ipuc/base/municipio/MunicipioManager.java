@@ -9,12 +9,8 @@ import java.util.List;
  */
 public interface MunicipioManager {
 
-    public void create(Municipio municipio);
-
-    public void update(Municipio municipio) throws Exception;
-
     public Municipio find(int id_municipio) throws Exception;
-
-    public List<Municipio> findAll() throws Exception;
+    
+    public List<Municipio> getMunicipioByCodRegion(int idRegion) throws Exception;
 
 }

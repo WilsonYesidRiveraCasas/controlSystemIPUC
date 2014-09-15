@@ -32,6 +32,8 @@
     <bean id="directives" class="com.ipuc.web.controller.Directives">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
+        <property name="regionManager" ref="regionManager"/>
+        <property name="municipioManager" ref="municipioManager"/>
     </bean>
     
     <!-- Jogger Server -->

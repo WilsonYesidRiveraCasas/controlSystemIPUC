@@ -157,17 +157,23 @@
 											<nav id="menu" class="nav-main" role="navigation">
 												<ul class="nav nav-main">
 													<li <#if sectionmin = "home"> class="nav-active"</#if> >
-														<a href="/test">
+														<a href="/home">
 															<i class="fa fa-home" aria-hidden="true"></i>
-															<span>${section}</span>
+															<span>Inicio</span>
 														</a>
 													</li>									
-													<li <#if sectionmin = "reg_pastor"> class="nav-active"</#if> >
-														<a href="/register">
+													<li <#if sectionmin = "registerpastor"> class="nav-active"</#if> >
+														<a href="/registerPastor">
 															<i class="fa fa-users" aria-hidden="true"></i>
 															<span>Registrar pastor</span>
 														</a>
-													</li>											
+													</li>
+													<li <#if sectionmin = "registercongregacion"> class="nav-active"</#if> >
+														<a href="/registerCongregacion">
+															<i class="fa fa-users" aria-hidden="true"></i>
+															<span>Registrar congregación</span>
+														</a>
+													</li>
 												</ul>
 											</nav>
 										</div>
