@@ -1,6 +1,7 @@
 
 package com.ipuc.base.persona;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -49,6 +50,20 @@ public class JPAPastorManager implements PastorManager {
             return (Long) query.getSingleResult();
         } catch(Exception e) {
             throw new Exception("Error count pastores. " + e.getMessage());
+        }
+    }
+
+    public List<Pastor> getPastoresDelDistritoSinCongregacion(String numIdentificacion) throws Exception {
+        try {
+            String jpql = " select p from Pastor p " + 
+                          " where p.numeroIdentificacion not in (select pastor.numeoIdentificacion from Trayectoria) and " + 
+                          " p.numeroIdentificacion <> ?1 " + 
+                          " order by p.persona.primerApellido, p.persona.segundoNombre, p.persona.primerNombre, p.persona.segundoNombre ASC";
+            Query query = entityManager.createQuery(jpql);
+            query.setParameter(1, numIdentificacion);
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new Exception("Error consultando los pastores sin congregación. " + e.getMessage());
         }
     }
   

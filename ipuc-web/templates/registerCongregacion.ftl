@@ -5,12 +5,12 @@
 </#macro>
 
 
-<@layout.layout_base_modico stylesheets=stylesheets javascripts=javascripts title="Registro de Pastores" section="Registro de Pastores" sectionmin="registerpastor">
+<@layout.layout_base_modico stylesheets=stylesheets javascripts=javascripts title="Registro de Congregaciones" section="Registro de Congregaciones" sectionmin="registercongre">
 
 <section class="panel">
 	<header class="panel-heading">
 
-		<h2 class="panel-title">Registro</h2>
+		<h2 class="panel-title">Congregación</h2>
 	</header>
 	<div class="panel-body">
 		<div class="form-group">
@@ -56,7 +56,7 @@
 </section>
 
 <#macro javascripts>
-	<script src="../static/js/registerPastor2.js" /></script>
+	<script src="../static/js/registerPastor.js" /></script>
 	<script src="../static/assets/vendor/pnotify/pnotify.custom.js"></script>
 </#macro>
 </@layout.layout_base_modico>

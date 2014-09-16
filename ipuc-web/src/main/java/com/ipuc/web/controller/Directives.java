@@ -62,7 +62,7 @@ public class Directives {
         Map<String, Object> info = new HashMap<String, Object>();
         info.put("pastor", pastor);
         info.put("identificationTypes", identificationTypes);
-        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor2.ftl", info);
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor.ftl", info);
     }
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
@@ -76,7 +76,8 @@ public class Directives {
             throw new ConflictException("El pastor ya existe");
         }
 
-        Pastor pastor = buildPastor(registerForm);
+        Pastor directivoLogueado = getPastorFromResponse(response);
+        Pastor pastor = buildPastor(registerForm, directivoLogueado);
         pastorManager.create(pastor);
         sendMail(pastor.getPersona().getEmail(), pastor.getPersona().getNumeroIdentificacion());
        
@@ -100,7 +101,7 @@ public class Directives {
         response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponseMunicipios(municipios));
     }
     
-    private Pastor buildPastor(MinisterRegisterForm form) throws ConflictException, Exception {
+    private Pastor buildPastor(MinisterRegisterForm form, Pastor directivoLogueado) throws ConflictException, Exception {
         Pastor pastor = new Pastor();
         Persona persona = createPerson(form);
         
@@ -110,6 +111,7 @@ public class Directives {
         pastor.setPersona(persona);
         pastor.setFechaNombramiento(new Date());
         pastor.setRoles(Pastor.ROL_PASTOR);
+        pastor.setDistrito(directivoLogueado.getDistrito());
         
         return pastor;
     }

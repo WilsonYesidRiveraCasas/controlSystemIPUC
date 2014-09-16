@@ -1,6 +1,7 @@
 
 package com.ipuc.base.pais;
 
+import com.ipuc.base.distrito.Distrito;
 import com.ipuc.base.region.Region;
 import java.io.Serializable;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Pais implements Serializable {
     private String nombre;
 
     private List<Region> regiones;
+    
+    private List<Distrito> distritos;
 
     public Pais() {
     }
@@ -66,9 +69,20 @@ public class Pais implements Serializable {
     public List<Region> getRegiones() {
         return regiones;
     }
-
+    
     public void setRegiones(List<Region> regiones) {
         this.regiones = regiones;
     }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pais")
+    public List<Distrito> getDistritos() {
+        return distritos;
+    }
+
+    public void setDistritos(List<Distrito> distritos) {
+        this.distritos = distritos;
+    }
+    
+    
     
 }

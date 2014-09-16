@@ -1,46 +1,91 @@
-$(function() {
+$(function() { 
+	$('#register').click(function () {
+		executeLogin();
+	});
 
-	$('#b_register').click(function() {
-		var identification = $('#t_identification').val();
-		var n_identification = $('#n_identification').val();
-		var p_name = $('#f_name').val();
-		var s_name = $('#s_name').val();
-		var p_lastname = $('#p_lastname').val();
-		var s_lastname = $('#s_lastname').val();
-		var d_birth = $('#d_birth').val();
-		var p_birth = $('#p_birth').val();
-		var m_status = $('#m_status').val();
-		var n_phone = $('#n_phone').val();
-		var mail = $('#mail').val();
-		var pass = $('#pass').val();
-		var status = $('#state').val();
-		var n_date = $('#n_date').val();
+	$(this).keypress(function(e) {
+        if(e.which == 13) {
+        	executeLogin();
+        }
+    });
 
-		var data = { 
-				t_identification : identification, 
-				n_identification : n_identification,
-				p_name : p_name,
-				s_name : s_name,
-				p_lastname : p_lastname,
-				s_lastname : s_lastname,
-				d_birth : d_birth,
-				p_birth : p_birth,
-				m_status : m_status,
-				n_phone : n_phone,
-				mail : mail,
-				pass : pass,
-				status : status,
-				n_date : n_date
-			};
+    $("#num_identificacion").keydown(function(e) {
+        elementValidate($(this));
+    });
 
-		$.ajax({
-			type: "POST",
-			url: "/register",
-			contentType: 'application/json',
-			data: JSON.stringify(data)
-		}).done(function( msg ) {
-		    alert( "Data Saved: " + msg );
+    $('#correo').keydown(function(e) {
+    	elementValidate($(this));
+    });
+
+	function executeLogin () {
+		if(!formValidate()) {
+
+			$.ajax({
+				type: "POST",
+				url: "/registerPastor",
+				contentType: 'application/json',
+				data: JSON.stringify(getData()),
+				statusCode: {
+					409 : function() {
+						errorNotificaction('El pastor ya existe');
+				    }
+				}
+			}).done(function( msg ) {
+				sucessNotificaction();
+			    resetForm();
+			});
+		}
+	};
+
+	function sucessNotificaction() {
+		new PNotify({
+			title: 'Registro Exitoso',
+			text: 'Podrás seguir registrando.',
+			type: 'success'
 		});
+	}
 
-	});	
+	function errorNotificaction(msj) {
+		new PNotify({
+			title : 'Error registrando',
+			text : msj,
+			type : 'error'
+		});
+	}
+
+	function getData() {
+		var data = {
+			tipo_identi : $('#tipo_identi').val(),
+			num_identi : $('#num_identificacion').val(),
+			correo : $('#correo').val()
+		};
+
+		return data;
+	}
+
+	function formValidate() {
+
+		var num_identi = elementValidate($('#num_identificacion')); 
+		var correo = elementValidate($('#correo'));
+		var tipo_identi = elementValidate($('#tipo_identi'));
+
+		return num_identi && tipo_identi && correo;
+	}
+
+	function elementValidate(element) {
+		var validate = $(element).val().length == 0;
+		if(validate) {
+			$(element).closest('.form-group').removeClass('has-success').addClass('has-error');			
+		} else {
+			$(element).closest('.form-group').removeClass('has-error');
+		}
+		return validate;
+	}
+
+	function resetForm () {
+		$('#num_identificacion').val("");
+		$('#tipo_identi').val("CC");
+		$('#correo').val("");
+		var tipo_identi = elementValidate();
+	}
 });

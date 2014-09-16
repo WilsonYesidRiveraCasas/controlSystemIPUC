@@ -1,6 +1,7 @@
 
 package com.ipuc.base.persona;
 
+import com.ipuc.base.distrito.Distrito;
 import com.ipuc.base.historialTarjeta.HistorialTarjeta;
 import com.ipuc.base.trayectoria.Trayectoria;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -47,6 +49,8 @@ public class Pastor implements Serializable {
     private String password;
     
     private String estado;
+    
+    private Distrito distrito;
     
     private List<Trayectoria> trayectoriaCongregacion;
 
@@ -121,6 +125,16 @@ public class Pastor implements Serializable {
         this.estado = estado;
     }
 
+    @JoinColumn(name = "distrito", referencedColumnName = "id_distrito")
+    @ManyToOne(optional = false)
+    public Distrito getDistrito() {
+        return distrito;
+    }
+
+    public void setDistrito(Distrito distrito) {
+        this.distrito = distrito;
+    }
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pastor")
     public List<Trayectoria> getTrayectoriaCongregacion() {
         return trayectoriaCongregacion;
