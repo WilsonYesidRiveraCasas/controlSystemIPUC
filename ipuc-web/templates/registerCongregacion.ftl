@@ -14,37 +14,74 @@
 	</header>
 	<div class="panel-body">
 		<div class="form-group">
-			<label class="col-md-3 control-label">Tipo de documento <span class="required">*</span></label>
+			<label class="col-md-3 control-label">Nombre <span class="required">*</span></label>
 			<div class="col-md-6">
-				<select data-plugin-selectTwo class="form-control populate" id = "tipo_identi" name="tipo_identi" title="Por favor seleccione un tipo de identificación" required>
-					<optgroup label="Seleccione un tipo">
-						<#list identificationTypes as type>
-							<option value = "${type.codeTipoIdenti}">${type.nombreTipoIdenti}</option>
-						</#list>
-					</optgroup>						
-				</select>
-				<label class="error" for="tipo_identi"></label>
+				<input type="text" class="form-control" id="name_congre" maxlength="50" required/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-md-3 control-label" for="num_identificacion">Número de identificación <span class="required">*</span></label>
+			<label class="col-md-3 control-label">Dirección <span class="required">*</span></label>
 			<div class="col-md-6">
-				<input type="text" class="form-control" id="num_identificacion" required/>
+				<input type="text" class="form-control" id="dir_congre" maxlength="200" required/>
 			</div>
 		</div>
-
 		<div class="form-group">
-			<label class="col-md-3 control-label">Correo <span class="required">*</span></label>
+			<label class="col-md-3 control-label">Teléfono</label>
 			<div class="col-md-6">
 				<div class="input-group input-group-icon">
 					<span class="input-group-addon">
-						<span class="icon"><i class="fa fa-envelope"></i></span>
+						<span class="icon"><i class="fa fa-phone"></i></span>
 					</span>
-					<input type="text" class="form-control" placeholder="pastor@ipuc.com" id="correo" required/>
+					<input type="text" class="form-control" placeholder="Teléfono o celular" id="tel_congre" maxlength="50">
 				</div>
 			</div>
-		</div>		
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label">Fecha apertura</label>
+			<div class="col-md-6">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					</span>
+					<input type="text" data-plugin-datepicker class="form-control" id="date_congre">
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label">Departamento o región <span class="required">*</span></label>
+			<div class="col-md-6">
+				<select data-plugin-selectTwo class="form-control populate" id = "reg_congre" name="reg_congre" title="Por favor seleccione una región del páis" required>
+					<optgroup label="Seleccione una región">
+						<#list regiones as region>
+							<option value = "${region.idRegion}">${region.nombre}</option>
+						</#list>
+					</optgroup>						
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label">Municipio <span class="required">*</span></label>
+			<div class="col-md-6">
+				<select data-plugin-selectTwo class="form-control populate" id = "muni_congre" name="muni_congre" title="Por favor seleccione un municipio" disabled="" required>
+					<optgroup label="Seleccione un municipio">
+					</optgroup>						
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label">Pastor</label>
+			<div class="col-md-6">
+				<select data-plugin-selectTwo class="form-control populate" id = "pastor_congre" name="pastor_congre" title="Por favor seleccione un pastor" disabled="" required>
+					<optgroup label="Seleccione un pastor">
+					</optgroup>						
+				</select>
+			</div>
+			<div class="col-md-2">
+				<button id = "loadPastor" type="button" class="mb-xs mt-xs mr-xs btn btn-default"><i class="fa fa-refresh"></i> Cargar</button>
+			</div>
+		</div>
 	</div>
+
 	<footer class="panel-footer">
 		<div class="row">
 			<div class="col-sm-9 col-sm-offset-3">

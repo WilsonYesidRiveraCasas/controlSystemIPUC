@@ -21,9 +21,9 @@ public class JPARegionManager implements RegionManager {
 
     public List<Region> getRegionByPais(String codPais) throws Exception {
         try {
-            String strQuery = "select r from Region r where r.codigoPais := codPais";
-            Query query = entityManager.createQuery(strQuery);
-            query.setParameter("codPais", codPais);
+            String sql = " select * from region where pais =?1";
+            Query query = entityManager.createNativeQuery(sql, Region.class);
+            query.setParameter(1, codPais);
             return query.getResultList();
         } catch(Exception e) {
             throw new Exception("Error get congregations. " + e.getMessage());

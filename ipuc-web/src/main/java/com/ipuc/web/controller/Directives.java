@@ -85,8 +85,13 @@ public class Directives {
     }
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
-    public void registerCongregacion(Request request, Response response) {
-        
+    public void registerCongregacionForm(Request request, Response response) throws Exception {
+        List<Region> regiones = getRegiones();        
+        Pastor pastor = getPastorFromResponse(response);
+        Map<String, Object> info = new HashMap<String, Object>();
+        info.put("pastor", pastor);
+        info.put("regiones", regiones);
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerCongregacion.ftl", info);
     }
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
