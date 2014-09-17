@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface CongregacionManager {
 
-    public void create(Congregacion congregacion);
+    public void create(Congregacion congregacion) throws Exception;
 
     public void update(Congregacion congregacion) throws Exception;
 

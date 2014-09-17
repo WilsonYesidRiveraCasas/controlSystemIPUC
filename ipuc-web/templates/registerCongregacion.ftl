@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-md-3 control-label">Fecha apertura</label>
+			<label class="col-md-3 control-label">Fecha apertura <span class="required">*</span></label>
 			<div class="col-md-6">
 				<div class="input-group">
 					<span class="input-group-addon">
@@ -52,6 +52,7 @@
 			<div class="col-md-6">
 				<select data-plugin-selectTwo class="form-control populate" id = "reg_congre" name="reg_congre" title="Por favor seleccione una región del páis" required>
 					<optgroup label="Seleccione una región">
+							<option value = "" selected>Sin asignar</option>
 						<#list regiones as region>
 							<option value = "${region.idRegion}">${region.nombre}</option>
 						</#list>

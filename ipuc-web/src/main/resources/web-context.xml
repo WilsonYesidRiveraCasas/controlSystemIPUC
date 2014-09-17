@@ -34,6 +34,8 @@
         <property name="personaManager" ref="personaManager"/>
         <property name="regionManager" ref="regionManager"/>
         <property name="municipioManager" ref="municipioManager"/>
+        <property name="congregacionManager" ref="congregacionManager"/>
+        <property name="trayectoriaManager" ref="trayectoriaManager"/>
     </bean>
     
     <!-- Jogger Server -->

@@ -1,4 +1,5 @@
-$(function() { 
+$(function() {
+
 	$('#register').click(function () {
 		executeLogin();
 	});
@@ -56,11 +57,23 @@ $(function() {
         }
     });
 
-    $("#num_identificacion").keydown(function(e) {
+	$("#name_congre").keydown(function(e) {
         elementValidate($(this));
     });
 
-    $('#correo').keydown(function(e) {
+    $("#dir_congre").keydown(function(e) {
+        elementValidate($(this));
+    });
+
+    $("#date_congre").focusout(function(e) {
+        elementValidate($(this));
+    });
+
+    $("#reg_congre").focusout(function(e) {
+        elementValidate($(this));
+    });
+
+    $('#muni_congre').focusout(function(e) {
     	elementValidate($(this));
     });
 
@@ -69,42 +82,39 @@ $(function() {
 
 			$.ajax({
 				type: "POST",
-				url: "/registerPastor",
+				url: "/registerCongregacion",
 				contentType: 'application/json',
 				data: JSON.stringify(getData()),
 				statusCode: {
 					409 : function() {
-						errorNotificaction('El pastor ya existe');
+						notificacionGenerica('Error registrando', 'La congregación ya existe' , 'error');
 				    }
 				}
 			}).done(function( msg ) {
-				sucessNotificaction();
+				notificacionGenerica('Registro exitoso', 'Podrás continuar registrando congregaciones', 'sucess');
 			    resetForm();
 			});
+		} else {
+			notificacionGenerica('Datos incompletos', 'Se han señalado los campos que se requieren' , 'error');
 		}
 	};
 
-	function sucessNotificaction() {
+	function notificacionGenerica(titulo, texto, tipo) {
 		new PNotify({
-			title: 'Registro Exitoso',
-			text: 'Podrás seguir registrando.',
-			type: 'success'
-		});
-	}
-
-	function errorNotificaction(msj) {
-		new PNotify({
-			title : 'Error registrando',
-			text : msj,
-			type : 'error'
+			title : titulo,
+			text : texto,
+			type : tipo
 		});
 	}
 
 	function getData() {
 		var data = {
-			tipo_identi : $('#tipo_identi').val(),
-			num_identi : $('#num_identificacion').val(),
-			correo : $('#correo').val()
+			nombre : $('#name_congre').val(),
+			direccion : $('#dir_congre').val(),
+			telefono : $('#tel_congre').val(),
+			fecha_apertura : $('#date_congre').val(),
+			municipio : $('#muni_congre').val(),
+			pastor : $('#pastor_congre').val()
 		};
 
 		return data;
@@ -112,11 +122,13 @@ $(function() {
 
 	function formValidate() {
 
-		var num_identi = elementValidate($('#num_identificacion')); 
-		var correo = elementValidate($('#correo'));
-		var tipo_identi = elementValidate($('#tipo_identi'));
+		var nombre = elementValidate($('#name_congre')); 
+		var direccion = elementValidate($('#dir_congre')); 
+		var fecha_apertura = elementValidate($('#date_congre'));
+		var region = elementValidate($('#reg_congre'));
+		var municipio = elementValidate($('#muni_congre'));
 
-		return num_identi && tipo_identi && correo;
+		return nombre && direccion && fecha_apertura && region && municipio;
 	}
 
 	function elementValidate(element) {
@@ -130,10 +142,12 @@ $(function() {
 	}
 
 	function resetForm () {
-		$('#num_identificacion').val("");
-		$('#tipo_identi').val("CC");
-		$('#correo').val("");
-		var tipo_identi = elementValidate();
+		$('#name_congre').val("");
+		$('#dir_congre').val("");
+		$('#date_congre').val("");
+		$('#reg_congre').val("");
+		$('#muni_congre').find( "option" ).remove();
+		$('#muni_congre').attr('disabled', true);
 	}
 
 	function buildMuinicipiosOptions(arrayMunicipios) {

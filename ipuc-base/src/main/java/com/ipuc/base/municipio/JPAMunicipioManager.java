@@ -16,7 +16,14 @@ public class JPAMunicipioManager implements MunicipioManager {
     private EntityManager entityManager;
 
     public Municipio find(int id_municipio) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String sql = " select * from municipio where id_municipio =?1";
+            Query query = entityManager.createNativeQuery(sql, Municipio.class);
+            query.setParameter(1, id_municipio);
+            return (Municipio) query.getSingleResult();
+        } catch(Exception e) {
+            throw new Exception("Error get Municipio con id " + id_municipio + ". " + e.getMessage());
+        }
     }
 
     public List<Municipio> getMunicipioByCodRegion(int idRegion) throws Exception {
