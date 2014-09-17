@@ -53,14 +53,10 @@ public class JPAPastorManager implements PastorManager {
         }
     }
 
-    public List<Pastor> getPastoresDelDistritoSinCongregacion(String numIdentificacion) throws Exception {
+    public List<Pastor> getPastoresDelDistritoSinCongregacion() throws Exception {
         try {
-            String jpql = " select p from Pastor p " + 
-                          " where p.numeroIdentificacion not in (select pastor.numeoIdentificacion from Trayectoria) and " + 
-                          " p.numeroIdentificacion <> ?1 " + 
-                          " order by p.persona.primerApellido, p.persona.segundoNombre, p.persona.primerNombre, p.persona.segundoNombre ASC";
-            Query query = entityManager.createQuery(jpql);
-            query.setParameter(1, numIdentificacion);
+            String sql = " select * from pastor where numero_identificacion not in (select pastor from trayectoria)";
+            Query query = entityManager.createNativeQuery(sql, Pastor.class);
             return query.getResultList();
         } catch (Exception e) {
             throw new Exception("Error consultando los pastores sin congregación. " + e.getMessage());

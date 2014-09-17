@@ -21,9 +21,9 @@ public class JPAMunicipioManager implements MunicipioManager {
 
     public List<Municipio> getMunicipioByCodRegion(int idRegion) throws Exception {
         try {
-            String strQuery = "select m from Municipio m where m.region.idRegion := idRegion";
-            Query query = entityManager.createQuery(strQuery);
-            query.setParameter("idRegion", idRegion);
+            String sql = "select * from municipio where region = ?1";
+            Query query = entityManager.createNativeQuery(sql, Municipio.class);
+            query.setParameter(1, idRegion);
             return query.getResultList();
         } catch(Exception e) {
             throw new Exception("Error get municipios by region " + idRegion + ". " + e.getMessage());

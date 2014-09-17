@@ -97,13 +97,21 @@ public class Directives {
     @Secured(role=Pastor.ROL_DIRECTIVO)
     public void getMunicipios(Request request, Response response) throws ConflictException, Exception {
         
-        JSONObject json = new JSONObject(request.getBody().asString());
-        int idRegion = json.getInt("codRegion");
+        int idRegion = Integer.parseInt(request.getPathVariable("region"));
         List<Municipio> municipios = municipioManager.getMunicipioByCodRegion(idRegion);
         if(municipios == null || municipios.isEmpty()) {
             throw new ConflictException("No se encontraron municipios, región inválida");
         }
         response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponseMunicipios(municipios));
+    }
+    
+    public void getPastoresSinCongregacion(Request request, Response response) throws ConflictException, Exception {
+        
+        List<Pastor> pastores = pastorManager.getPastoresDelDistritoSinCongregacion();
+        if(pastores == null || pastores.isEmpty()) {
+            throw new ConflictException("No se encontraron pastores sin congregación");
+        }
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponsePastores(pastores));
     }
     
     private Pastor buildPastor(MinisterRegisterForm form, Pastor directivoLogueado) throws ConflictException, Exception {
@@ -182,6 +190,19 @@ public class Directives {
         }
         
         return municipiosJson.toString();
+    }
+    
+    private String getResponsePastores(List<Pastor> pastores) {
+        JSONArray pastoresJson = new JSONArray();
+        
+        for(Pastor pastor : pastores) {
+            JSONObject obj = new JSONObject();
+            obj.put("num_identi", pastor.getNumeroIdentificacion());
+            obj.put("nombre", pastor.nombreApellido());
+            pastoresJson.put(obj);
+        }
+        
+        return pastoresJson.toString();
     }
     
     private Pastor getPastorFromResponse(Response response){

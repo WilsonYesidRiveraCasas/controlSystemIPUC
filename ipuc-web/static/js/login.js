@@ -9,16 +9,6 @@ $(function() {
 		
 	});
 
-	('#login').on('vclick', function() {
-		alert('capturado');
-
-		$("#msg").html("");
-		$("#msg").hide();
-		executeLogin();
-		return false;
-		
-	});
-
 	$("#n_identification").keydown(function(e) {
         elementValidate($(this));
     });
