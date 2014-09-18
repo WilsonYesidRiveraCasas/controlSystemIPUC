@@ -28,8 +28,9 @@ public class JPACongregacionManager implements CongregacionManager {
     @Transactional
     public void create(Congregacion congregacion) throws Exception {
         try {
-            entityManager.persist(congregacion);
+            entityManager.persist(congregacion);            
             entityManager.flush();
+            System.out.println("cod: " + congregacion.getCodCongregacion());
         } catch (Exception e) {
             log.error("Exception creando congregación", e);
             throw e;

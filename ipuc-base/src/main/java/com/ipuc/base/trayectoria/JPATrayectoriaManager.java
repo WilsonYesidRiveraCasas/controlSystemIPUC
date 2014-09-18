@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -18,6 +19,7 @@ public class JPATrayectoriaManager implements TrayectoriaManager {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public void create(Trayectoria trayectoria) throws Exception {
         try {
             entityManager.persist(trayectoria);

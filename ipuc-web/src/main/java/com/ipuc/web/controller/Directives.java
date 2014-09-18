@@ -106,7 +106,7 @@ public class Directives {
     }
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
-    @Transactional(rollbackFor=Exception.class)
+  //  @Transactional(rollbackFor=Exception.class)
     public void registerCongregacion(Request request, Response response) throws InvalidDataException, BadRequestException, Exception {
         log.info("Congregacion register request /register");
         CongregacionRegisterForm register = CongregacionRegisterForm.parse(request);
