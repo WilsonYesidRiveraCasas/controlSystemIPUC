@@ -29,7 +29,7 @@ public class Trayectoria implements Serializable {
 
     private Date fechaPosesion;
 
-    private String fechaTraslado;
+    private Date fechaTraslado;
 
     private Pastor pastor;
 
@@ -71,11 +71,12 @@ public class Trayectoria implements Serializable {
     }
 
     @Column(name = "fecha_traslado")
-    public String getFechaTraslado() {
+    @Temporal(TemporalType.DATE)
+    public Date getFechaTraslado() {
         return fechaTraslado;
     }
 
-    public void setFechaTraslado(String fechaTraslado) {
+    public void setFechaTraslado(Date fechaTraslado) {
         this.fechaTraslado = fechaTraslado;
     }
 

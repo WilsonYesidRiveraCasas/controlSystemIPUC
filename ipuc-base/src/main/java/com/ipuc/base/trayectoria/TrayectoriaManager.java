@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface TrayectoriaManager {
 
-    public void create(Trayectoria trayectoria);
+    public void create(Trayectoria trayectoria)throws Exception;
 
     public void update(Trayectoria trayectoria) throws Exception;
 

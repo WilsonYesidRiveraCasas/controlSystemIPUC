@@ -1,15 +1,25 @@
 
 package com.ipuc.web.controller;
 
+import com.ipuc.base.congregacion.Congregacion;
+import com.ipuc.base.congregacion.CongregacionManager;
 import com.ipuc.base.mail.MailService;
+import com.ipuc.base.municipio.Municipio;
+import com.ipuc.base.municipio.MunicipioManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.base.persona.Persona;
 import com.ipuc.base.persona.PersonaManager;
+import com.ipuc.base.region.Region;
+import com.ipuc.base.region.RegionManager;
+import com.ipuc.base.trayectoria.Trayectoria;
+import com.ipuc.base.trayectoria.TrayectoriaManager;
 import com.ipuc.base.util.TemplateProcessor;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
+import com.ipuc.web.exception.InvalidDataException;
+import com.ipuc.web.form.CongregacionRegisterForm;
 import com.ipuc.web.form.MinisterRegisterForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.list.CivilStateFormat;
@@ -23,8 +33,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +50,19 @@ public class Directives {
     
     private static final Logger log = LoggerFactory.getLogger(Directives.class);
     
+    private static final String COD_PAIS_DEFAULT = "CO";
+    
     private PastorManager pastorManager;
     
     private PersonaManager personaManager;
+    
+    private RegionManager regionManager;
+    
+    private MunicipioManager municipioManager;
+    
+    private CongregacionManager congregacionManager;
+    
+    private TrayectoriaManager trayectoriaManager;
    
     @Secured(role=Pastor.ROL_DIRECTIVO)
     public void registerForm(Request request, Response response) {
@@ -50,7 +73,7 @@ public class Directives {
         Map<String, Object> info = new HashMap<String, Object>();
         info.put("pastor", pastor);
         info.put("identificationTypes", identificationTypes);
-        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor2.ftl", info);
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerPastor.ftl", info);
     }
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
@@ -64,14 +87,91 @@ public class Directives {
             throw new ConflictException("El pastor ya existe");
         }
 
-        Pastor pastor = buildPastor(registerForm);
+        Pastor directivoLogueado = getPastorFromResponse(response);
+        Pastor pastor = buildPastor(registerForm, directivoLogueado);
         pastorManager.create(pastor);
         sendMail(pastor.getPersona().getEmail(), pastor.getPersona().getNumeroIdentificacion());
        
        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
     }
     
-    private Pastor buildPastor(MinisterRegisterForm form) throws ConflictException, Exception {
+    @Secured(role=Pastor.ROL_DIRECTIVO)
+    public void registerCongregacionForm(Request request, Response response) throws Exception {
+        List<Region> regiones = getRegiones();        
+        Pastor pastor = getPastorFromResponse(response);
+        Map<String, Object> info = new HashMap<String, Object>();
+        info.put("pastor", pastor);
+        info.put("regiones", regiones);
+        response.contentType(ResponseFormat.HTML.getContentType()).render("registerCongregacion.ftl", info);
+    }
+    
+    @Secured(role=Pastor.ROL_DIRECTIVO)
+  //  @Transactional(rollbackFor=Exception.class)
+    public void registerCongregacion(Request request, Response response) throws InvalidDataException, BadRequestException, Exception {
+        log.info("Congregacion register request /register");
+        CongregacionRegisterForm register = CongregacionRegisterForm.parse(request);
+        Pastor directivoLogueado = getPastorFromResponse(response);
+        Congregacion congregacion = buildCongregacion(register, directivoLogueado);
+        congregacionManager.create(congregacion);
+        
+        if(congregacion.getPastor() != null) {
+            Trayectoria trayectoria = new Trayectoria();
+            trayectoria.setCongregacion(congregacion);
+            trayectoria.setFechaPosesion(new Date());
+            trayectoria.setPastor(congregacion.getPastor());
+            trayectoriaManager.create(trayectoria);            
+        }
+        
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
+    }
+    
+    @Secured(role=Pastor.ROL_DIRECTIVO)
+    public void getMunicipios(Request request, Response response) throws ConflictException, Exception {
+        
+        int idRegion = Integer.parseInt(request.getPathVariable("region"));
+        List<Municipio> municipios = municipioManager.getMunicipioByCodRegion(idRegion);
+        if(municipios == null || municipios.isEmpty()) {
+            throw new ConflictException("No se encontraron municipios, región inválida");
+        }
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponseMunicipios(municipios));
+    }
+    
+    public void getPastoresSinCongregacion(Request request, Response response) throws ConflictException, Exception {
+        
+        List<Pastor> pastores = pastorManager.getPastoresDelDistritoSinCongregacion();
+        if(pastores == null || pastores.isEmpty()) {
+            throw new ConflictException("No se encontraron pastores sin congregación");
+        }
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponsePastores(pastores));
+    }
+    
+    private Congregacion buildCongregacion(CongregacionRegisterForm form, Pastor directivoLogueado) throws InvalidDataException, Exception {
+        Congregacion congregacion = new Congregacion();
+        congregacion.setNombre(form.getNombre());
+        congregacion.setDireccion(form.getDireccion());
+        congregacion.setTelefono(form.getTelefono());
+        congregacion.setDistrito(directivoLogueado.getDistrito());
+        congregacion.setFechaApertura(form.getFecha_apertura());
+        Pastor pastor = null;
+        if(form.getNum_identi_pastor() != null && !form.getNum_identi_pastor().isEmpty()) {
+            pastor = pastorManager.find(form.getNum_identi_pastor());
+            if(pastor == null) {
+                throw new InvalidDataException("El pastor con cédula " + form.getNum_identi_pastor() + " no existe");
+            }
+        }
+        congregacion.setPastor(pastor);
+        
+        Municipio municipio = municipioManager.find(form.getIdMunicipio());
+        if(municipio == null) {
+            throw new InvalidDataException("El municipio no existe");
+        }
+        
+        congregacion.setMunicipio(municipio);
+        
+        return congregacion;
+    }
+    
+    private Pastor buildPastor(MinisterRegisterForm form, Pastor directivoLogueado) throws ConflictException, Exception {
         Pastor pastor = new Pastor();
         Persona persona = createPerson(form);
         
@@ -81,6 +181,7 @@ public class Directives {
         pastor.setPersona(persona);
         pastor.setFechaNombramiento(new Date());
         pastor.setRoles(Pastor.ROL_PASTOR);
+        pastor.setDistrito(directivoLogueado.getDistrito());
         
         return pastor;
     }
@@ -109,6 +210,16 @@ public class Directives {
         
     }
     
+    private List<Region> getRegiones() throws Exception {
+        List<Region> regiones = regionManager.getRegionByPais(COD_PAIS_DEFAULT);
+        if(regiones == null || regiones.isEmpty()) {
+            throw new ConflictException("No se encontraron regiones, país no contemplado");
+        }
+        return regiones;
+    }
+    
+    
+    
     private void sendMail(String correo, String num_identificacion) throws TemplateException, IOException, Exception {
         
         List<String> to = new ArrayList<String>();
@@ -124,6 +235,33 @@ public class Directives {
         
     }
     
+    private String getResponseMunicipios(List<Municipio> municipios) {
+        
+        JSONArray municipiosJson = new JSONArray();
+        
+        for(Municipio m : municipios) {
+            JSONObject obj = new JSONObject();
+            obj.put("codMunicipio", m.getIdMunicipio());
+            obj.put("nombre", m.getNombre());
+            municipiosJson.put(obj);
+        }
+        
+        return municipiosJson.toString();
+    }
+    
+    private String getResponsePastores(List<Pastor> pastores) {
+        JSONArray pastoresJson = new JSONArray();
+        
+        for(Pastor pastor : pastores) {
+            JSONObject obj = new JSONObject();
+            obj.put("num_identi", pastor.getNumeroIdentificacion());
+            obj.put("nombre", pastor.nombreApellido());
+            pastoresJson.put(obj);
+        }
+        
+        return pastoresJson.toString();
+    }
+    
     private Pastor getPastorFromResponse(Response response){
         Map<String, Object> atributes = response.getAttributes();
         Pastor pastor = (Pastor) atributes.get("pastor");
@@ -137,4 +275,21 @@ public class Directives {
     public void setPersonaManager(PersonaManager personaManager) {
         this.personaManager = personaManager;
     }
+
+    public void setRegionManager(RegionManager regionManager) {
+        this.regionManager = regionManager;
+    }
+
+    public void setMunicipioManager(MunicipioManager municipioManager) {
+        this.municipioManager = municipioManager;
+    }
+
+    public void setCongregacionManager(CongregacionManager congregacionManager) {
+        this.congregacionManager = congregacionManager;
+    }
+
+    public void setTrayectoriaManager(TrayectoriaManager trayectoriaManager) {
+        this.trayectoriaManager = trayectoriaManager;
+    }
+    
 }

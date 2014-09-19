@@ -15,5 +15,6 @@
     <class>com.ipuc.base.region.Region</class>
     <class>com.ipuc.base.persona.Pastor</class>
     <class>com.ipuc.base.auth.Auth</class>
+    <class>com.ipuc.base.distrito.Distrito</class>
   </persistence-unit>
 </persistence>

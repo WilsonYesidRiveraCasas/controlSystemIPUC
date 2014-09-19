@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -18,8 +19,15 @@ public class JPATrayectoriaManager implements TrayectoriaManager {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Trayectoria trayectoria) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional
+    public void create(Trayectoria trayectoria) throws Exception {
+        try {
+            entityManager.persist(trayectoria);
+            entityManager.flush();
+        } catch (Exception e) {
+            log.error("Exception creando trayectoria", e);
+            throw e;
+        }
     }
 
     public void update(Trayectoria trayectoria) throws Exception {

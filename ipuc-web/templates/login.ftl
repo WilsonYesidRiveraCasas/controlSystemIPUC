@@ -78,8 +78,7 @@
 						<label id="msg" class="error"></label>
 						<div class="form-group mb-lg">
 							<div class="text-right">
-								<button id="login" class="btn btn-primary hidden-xs">Ingresar</button>
-								<button id="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">Ingresar</button>								
+								<button id="login" class="btn btn-primary">Ingresar</button>						
 							</div>
 						</div>
 					</div>

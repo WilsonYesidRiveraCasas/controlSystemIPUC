@@ -25,8 +25,16 @@ public class JPACongregacionManager implements CongregacionManager {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Congregacion congregacion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional
+    public void create(Congregacion congregacion) throws Exception {
+        try {
+            entityManager.persist(congregacion);            
+            entityManager.flush();
+            System.out.println("cod: " + congregacion.getCodCongregacion());
+        } catch (Exception e) {
+            log.error("Exception creando congregación", e);
+            throw e;
+        }
     }
 
     public void update(Congregacion congregacion) throws Exception {

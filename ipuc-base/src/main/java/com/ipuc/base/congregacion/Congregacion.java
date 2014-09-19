@@ -1,6 +1,7 @@
 
 package com.ipuc.base.congregacion;
 
+import com.ipuc.base.distrito.Distrito;
 import com.ipuc.base.membresia.Membresia;
 import com.ipuc.base.municipio.Municipio;
 import com.ipuc.base.persona.Creyente;
@@ -12,6 +13,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,7 +34,7 @@ import org.hibernate.validator.constraints.Length;
 @Table(name = "congregacion")
 public class Congregacion implements Serializable {
 
-    private String codCongregacion;
+    private int codCongregacion;
 
     private String nombre;
 
@@ -39,7 +42,7 @@ public class Congregacion implements Serializable {
 
     private String telefono;
 
-    private String distrito;
+    private Distrito distrito;
 
     private Municipio municipio;
 
@@ -53,29 +56,15 @@ public class Congregacion implements Serializable {
     
     private List<Creyente> creyentes;
 
-    public Congregacion() {
-    }
-
-    public Congregacion(String codCongregacion) {
-        this.codCongregacion = codCongregacion;
-    }
-
-    public Congregacion(String codCongregacion, String nombre, String distrito, Date fechaApertura) {
-        this.codCongregacion = codCongregacion;
-        this.nombre = nombre;
-        this.distrito = distrito;
-        this.fechaApertura = fechaApertura;
-    }
-
     @Id
     @NotNull
-    @Length(max = 50)
     @Column(name = "cod_congregacion")
-    public String getCodCongregacion() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getCodCongregacion() {
         return codCongregacion;
     }
 
-    public void setCodCongregacion(String codCongregacion) {
+    public void setCodCongregacion(int codCongregacion) {
         this.codCongregacion = codCongregacion;
     }
 
@@ -110,14 +99,13 @@ public class Congregacion implements Serializable {
         this.telefono = telefono;
     }
 
-    @NotNull
-    @Length(max = 10)
-    @Column(name = "distrito")
-    public String getDistrito() {
+    @JoinColumn(name = "distrito", referencedColumnName = "id_distrito")
+    @ManyToOne(optional = false)
+    public Distrito getDistrito() {
         return distrito;
     }
 
-    public void setDistrito(String distrito) {
+    public void setDistrito(Distrito distrito) {
         this.distrito = distrito;
     }
 

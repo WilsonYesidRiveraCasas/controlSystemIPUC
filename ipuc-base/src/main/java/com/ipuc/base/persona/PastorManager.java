@@ -1,6 +1,8 @@
 
 package com.ipuc.base.persona;
 
+import java.util.List;
+
 /**
  *
  * @author wilson-rivera
@@ -14,5 +16,7 @@ public interface PastorManager {
     public Pastor find(String num_identificacion) throws Exception;
     
     public long countPastores() throws Exception;
+    
+    public List<Pastor> getPastoresDelDistritoSinCongregacion() throws Exception;
 
 }

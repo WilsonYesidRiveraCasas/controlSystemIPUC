@@ -19,5 +19,6 @@ public class RegexValidator {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(txt);
         return matcher.matches();
+        
     }
 }
