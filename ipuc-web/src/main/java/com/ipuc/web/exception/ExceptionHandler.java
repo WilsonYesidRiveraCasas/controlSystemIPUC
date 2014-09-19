@@ -46,7 +46,7 @@ public class ExceptionHandler {
     }
 
     private void renderNotFound(Request request, Response response, Exception e) {
-       // response.notFound().contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(404));
+        response.notFound().contentType(ResponseFormat.HTML.getContentType()).render("404.ftl");
     }
 
     private void renderUnExpected(Request request, Response response, Exception e) {
