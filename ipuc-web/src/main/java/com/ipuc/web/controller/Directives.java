@@ -3,6 +3,7 @@ package com.ipuc.web.controller;
 
 import com.ipuc.base.congregacion.Congregacion;
 import com.ipuc.base.congregacion.CongregacionManager;
+import com.ipuc.base.exception.NotSendMailException;
 import com.ipuc.base.mail.MailService;
 import com.ipuc.base.municipio.Municipio;
 import com.ipuc.base.municipio.MunicipioManager;
@@ -18,7 +19,6 @@ import com.ipuc.base.util.TemplateProcessor;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
-import com.ipuc.web.exception.InvalidDataException;
 import com.ipuc.web.form.CongregacionRegisterForm;
 import com.ipuc.web.form.MinisterRegisterForm;
 import com.ipuc.web.helper.ResponseFormat;
@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.json.JSONArray;
@@ -78,7 +77,7 @@ public class Directives {
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
     @Transactional(rollbackFor=Exception.class)
-    public void registerPastor(Request request, Response response) throws ConflictException, BadRequestException, Exception {
+    public void registerPastor(Request request, Response response) throws ConflictException, BadRequestException, NotSendMailException, Exception {
         log.info("Minister register request /register");
         MinisterRegisterForm registerForm = MinisterRegisterForm.parse(request);
         Pastor pastorAux = pastorManager.find(registerForm.getN_identificacion());
@@ -107,7 +106,7 @@ public class Directives {
     
     @Secured(role=Pastor.ROL_DIRECTIVO)
   //  @Transactional(rollbackFor=Exception.class)
-    public void registerCongregacion(Request request, Response response) throws InvalidDataException, BadRequestException, Exception {
+    public void registerCongregacion(Request request, Response response) throws BadRequestException, Exception {
         log.info("Congregacion register request /register");
         CongregacionRegisterForm register = CongregacionRegisterForm.parse(request);
         Pastor directivoLogueado = getPastorFromResponse(response);
@@ -145,7 +144,7 @@ public class Directives {
         response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponsePastores(pastores));
     }
     
-    private Congregacion buildCongregacion(CongregacionRegisterForm form, Pastor directivoLogueado) throws InvalidDataException, Exception {
+    private Congregacion buildCongregacion(CongregacionRegisterForm form, Pastor directivoLogueado) throws Exception {
         Congregacion congregacion = new Congregacion();
         congregacion.setNombre(form.getNombre());
         congregacion.setDireccion(form.getDireccion());
@@ -156,14 +155,14 @@ public class Directives {
         if(form.getNum_identi_pastor() != null && !form.getNum_identi_pastor().isEmpty()) {
             pastor = pastorManager.find(form.getNum_identi_pastor());
             if(pastor == null) {
-                throw new InvalidDataException("El pastor con cédula " + form.getNum_identi_pastor() + " no existe");
+                throw new ConflictException("El pastor con cédula " + form.getNum_identi_pastor() + " no existe");
             }
         }
         congregacion.setPastor(pastor);
         
         Municipio municipio = municipioManager.find(form.getIdMunicipio());
         if(municipio == null) {
-            throw new InvalidDataException("El municipio no existe");
+            throw new ConflictException("El municipio no existe");
         }
         
         congregacion.setMunicipio(municipio);
@@ -220,7 +219,7 @@ public class Directives {
     
     
     
-    private void sendMail(String correo, String num_identificacion) throws TemplateException, IOException, Exception {
+    private void sendMail(String correo, String num_identificacion) throws TemplateException, IOException, NotSendMailException {
         
         List<String> to = new ArrayList<String>();
         to.add(correo);

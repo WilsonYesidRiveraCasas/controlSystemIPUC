@@ -1,5 +1,6 @@
 package com.ipuc.base.mail;
 
+import com.ipuc.base.exception.NotSendMailException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MailService {
 
-    private static String TRANSPORT = "smtp";
+    private static final String TRANSPORT = "smtp";
 
     private static final String HOST = "smtp.gmail.com";
 
@@ -46,13 +47,13 @@ public class MailService {
     
     
     
-    private void addRecipient(List<String> to, Mail mail) throws Exception {
+    private void addRecipient(List<String> to, Mail mail) throws NotSendMailException {
         for(String r : to) {
             mail.addRecipient(r);
         }
     }
 
-    private void send(Mail mail) {
+    private void send(Mail mail) throws NotSendMailException {
         mail.setFrom(USER);
         try {
             Message msg = MessageFactory.buildMessage(session, mail);
@@ -64,6 +65,7 @@ public class MailService {
             t.close();
         } catch(MessagingException e) {
             log.error("Error sending email ", e);
+            throw new NotSendMailException("Error enviando correo");
         }
     }
 
@@ -78,10 +80,9 @@ public class MailService {
         return props;
     }
     
-    public static void send(List<String> to, String subject, String body) throws Exception {
+    public static void send(List<String> to, String subject, String body) throws NotSendMailException {
         MailService ms = new MailService();
         Mail mail = new Mail();
-        
         ms.addRecipient(to, mail);
         mail.setSubject(subject);
         mail.withHtml().setBody(body);
@@ -97,7 +98,7 @@ public class MailService {
             to.add("wilson.rivera.1150010@gmail.com");
             MailService.send(to, "MailService Test", "<h1>Hello world</h1>");
             log.info("Email sent");
-        } catch(Exception e) {
+        } catch(NotSendMailException e) {
             log.error("Error trying to send email : " + e.getMessage());
         }
     }

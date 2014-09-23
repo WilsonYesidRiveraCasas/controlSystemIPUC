@@ -3,6 +3,7 @@ package com.ipuc.web.form;
 
 import com.ipuc.web.exception.BadRequestException;
 import org.jogger.http.Request;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +29,37 @@ public class LoginForm {
         try {
             JSONObject json = new JSONObject(request.getBody().asString());
             LoginForm login = new LoginForm();
-            login.setN_identification(json.getString("n_identification"));
-            login.setPass(json.getString("pass"));
+            login.setN_identification(validaNumIdentificacion(json.getString("n_identification")));
+            login.setPass(validaPassword(json.getString("pass")));
             
             return login;
-        } catch(Exception e) {
+        } catch(JSONException e) {
             log.error("Error parsing MinisterRegisterForm. Message: " + e.getMessage());
-            throw new BadRequestException("\"Error parsing MinisterRegisterForm\"");
+            throw new BadRequestException("Error manejando la petición. Inténtelo de nuevo y si persiste contáctese con el administrador");
         }
+    }
+    
+    private static String validaNumIdentificacion(String numIdentificacion) throws BadRequestException {
+        if(numIdentificacion == null || numIdentificacion.isEmpty()) {
+            throw new BadRequestException("El número de indentificación es requerido");
+        }
+        
+        if(numIdentificacion.length() > 50) {
+            throw new BadRequestException("El número de identificación excede los 50 caracteres");
+        }
+        return numIdentificacion;
+    }
+    
+    private static String validaPassword(String password) throws BadRequestException {
+        if(password == null || password.isEmpty()) {
+            throw new BadRequestException("La contraseña es requerida");
+        }
+        
+        if(password.length() > 100) {
+            throw new BadRequestException("La contraseña es muy larga");
+        }
+        
+        return password;
     }
 
     public String getN_identification() {

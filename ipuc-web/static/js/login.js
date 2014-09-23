@@ -33,9 +33,11 @@ $(function() {
 				contentType: 'application/json',
 				data: JSON.stringify(getData()),
 				statusCode: {
-					401 : function() {
-				      $("#msg").html("Número de identificación o contraseña inválidos");
-				      $("#msg").show();
+					400 : function(obj) {
+				      printMessageError(obj);
+				    },
+				    409 : function(obj) {
+				    	printMessageError(obj);
 				    }
 				}
 			}).done(function( msg ) {
@@ -43,6 +45,11 @@ $(function() {
 			});
 		}
 	};
+
+	function printMessageError(obj) {
+		$("#msg").html(obj.responseText);
+		$("#msg").show();
+	}
 
 	function formValidate() {
 		var n_identification = elementValidate($('#n_identification'));

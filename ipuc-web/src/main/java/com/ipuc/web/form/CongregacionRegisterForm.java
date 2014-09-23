@@ -2,10 +2,11 @@
 package com.ipuc.web.form;
 
 import com.ipuc.web.exception.BadRequestException;
-import com.ipuc.web.exception.InvalidDataException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.jogger.http.Request;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +31,11 @@ public class CongregacionRegisterForm {
     
     private String num_identi_pastor;
     
-    public static CongregacionRegisterForm parse(Request request) throws InvalidDataException, BadRequestException {
+    public static CongregacionRegisterForm parse(Request request) throws BadRequestException {
         return getRegister(request);
     }
     
-    private static CongregacionRegisterForm getRegister(Request request) throws BadRequestException, InvalidDataException {
+    private static CongregacionRegisterForm getRegister(Request request) throws BadRequestException {
         try {
             JSONObject json = new JSONObject(request.getBody().asString());
             CongregacionRegisterForm register = new CongregacionRegisterForm();
@@ -45,17 +46,15 @@ public class CongregacionRegisterForm {
             register.setIdMunicipio(validaMunicipio(json.getString("municipio")));
             register.setNum_identi_pastor(json.getString("pastor"));
             return register;
-        } catch(InvalidDataException e) {
-            throw e;
-        } catch(Exception e) {
+        } catch(JSONException e) {
             log.error("Error parsing CongregacionRegisterForm. Message: " + e.getMessage());
-            throw new BadRequestException("\"Error parsing MinisterRegisterForm\"");
+            throw new BadRequestException("Error manejando la petición. Inténtelo de nuevo y si persiste contáctese con el administrador");
         }
     }
     
-    private static String validaNombre(String nombre) throws InvalidDataException {
+    private static String validaNombre(String nombre) throws BadRequestException {
         if(nombre == null || nombre.isEmpty()) {
-            throw new InvalidDataException("El nombre de la congregación es requerido");
+            throw new BadRequestException("El nombre de la congregación es requerido");
         }
         
         if(nombre.length() > 50) {
@@ -65,9 +64,9 @@ public class CongregacionRegisterForm {
         return nombre;
     }
     
-    private static String validaDireccion(String direccion) throws InvalidDataException {
+    private static String validaDireccion(String direccion) throws BadRequestException {
         if(direccion == null || direccion.isEmpty()) {
-            throw new InvalidDataException("La dirección de la congregación es requerida");
+            throw new BadRequestException("La dirección de la congregación es requerida");
         }
         
         if(direccion.length() > 200) {
@@ -77,25 +76,25 @@ public class CongregacionRegisterForm {
         return direccion;
     }
     
-    private static Date validaFechaApertura(String fecha) throws InvalidDataException {
+    private static Date validaFechaApertura(String fecha) throws BadRequestException {
         if(fecha == null || fecha.isEmpty()) {
-            throw new InvalidDataException("La fecha de la congregación es requerida");
+            throw new BadRequestException("La fecha de la congregación es requerida");
         }
         
         SimpleDateFormat formatoFecha = new SimpleDateFormat("MM/dd/yyyy");
         Date nuevaFecha = null;
         try {
             nuevaFecha = formatoFecha.parse(fecha);
-        } catch (Exception ex) {
-            throw new InvalidDataException("Formato de fecha inválida");
+        } catch (ParseException ex) {
+            throw new BadRequestException("Formato de fecha inválida");
         }
         
         return nuevaFecha;
     }
     
-    private static int validaMunicipio(String muncipio) throws InvalidDataException {
+    private static int validaMunicipio(String muncipio) throws BadRequestException {
         if(muncipio == null || muncipio.isEmpty()) {
-            throw new InvalidDataException("La dirección de la congregación es requerida");
+            throw new BadRequestException("La dirección de la congregación es requerida");
         }
         
         if(muncipio.length() > 11) {
@@ -105,8 +104,8 @@ public class CongregacionRegisterForm {
         int idMunicipio = -1;
         try {
             idMunicipio = Integer.parseInt(muncipio);
-        } catch (Exception e) {
-            throw new InvalidDataException("El municipio es inválido");
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("El municipio es inválido");
         }
         
         return idMunicipio;

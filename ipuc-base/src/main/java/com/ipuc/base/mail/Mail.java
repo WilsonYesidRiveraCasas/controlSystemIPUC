@@ -1,6 +1,7 @@
 
 package com.ipuc.base.mail;
 
+import com.ipuc.base.exception.NotSendMailException;
 import com.ipuc.base.util.RegexValidator;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,9 @@ public class Mail {
         this.recipients = recipients;
     }
 
-    public void addRecipient(String email) throws Exception {
+    public void addRecipient(String email) throws NotSendMailException {
         if(!RegexValidator.isValidateEmail(email)) {
-            throw new Exception("Invalid Email : " + email);
+            throw new NotSendMailException("Invalid Email : " + email);
         }
         recipients.add(email);
     }
