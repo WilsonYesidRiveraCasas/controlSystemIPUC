@@ -7,6 +7,7 @@ import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
+import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.LoginForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.util.Random;
@@ -36,7 +37,7 @@ public class Login {
             createSession(response, form.getN_identification());
             response.contentType(contentType).write("{}");
         } else {
-            response.unauthorized().contentType(contentType).write("{\"status\" : \"invalid\"}");
+            throw new ConflictException("Identificación o contraseña incorrecta");
         }
     }
     
@@ -61,6 +62,12 @@ public class Login {
     }
     
     private void createAuth(String n_identification, String session_id) throws Exception {
+        Auth authAux = authManager.find(n_identification);
+        
+        if(authAux != null) {
+            authManager.delete(n_identification);
+        }
+        
         Auth auth = new Auth();
         auth.setNumeroIdentificacion(n_identification);
         auth.setIdSesion(session_id);

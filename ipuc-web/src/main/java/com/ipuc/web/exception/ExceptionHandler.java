@@ -1,11 +1,14 @@
 package com.ipuc.web.exception;
 
+import com.ipuc.base.exception.NotSendMailException;
+import com.ipuc.web.controller.Login;
 import com.ipuc.web.helper.ResponseFormat;
-import java.util.HashMap;
-import java.util.Map;
 import org.jogger.exception.NotFoundException;
+import org.jogger.exception.UnAuthorizedException;
+import org.jogger.http.Cookie;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,43 +24,46 @@ public class ExceptionHandler {
         log.warn("Handling " + e.getMessage() + " in " + request.getPath() + " request");
 
         if(e instanceof NotFoundException) {            
-            renderNotFound(request, response, e);            
+            renderNotFound(response, e);            
         } else if(e instanceof ConflictException) {
-            renderConflictException(request, response, e);
+            renderConflictException(response, e);
         } else if(e instanceof BadRequestException) {
-            renderBadRequestException(response);
-        } /*else if(e instanceof NotSendMailException) {
-            renderNotSendMailException(request, response, e);
-        } */else {
-            renderUnExpected(request, response, e);
+            renderBadRequestException(response, e);
+        } else if(e instanceof NotSendMailException) {
+            renderNotSendMailException(response, e);
+        } else if(e instanceof UnAuthorizedException) {
+            renderUnauthorized(response);
+        } else {
+            renderUnExpected(response, e);
         }
     }
 
-    private void renderNotSendMailException(Request request, Response response, Exception e) {
-        //response.status(500).contentType(ResponseFormat.JSON.getContentType()).write("{\"code\" : \"error_sending_email\"}");
+    private void renderNotSendMailException(Response response, Exception e) {
+        response.status(202).contentType(ResponseFormat.JSON.getContentType()).write("Error enviando el correo");
     }
 
-    private void renderBadRequestException(Response response) {
-        response.badRequest().contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(400));
+    private void renderBadRequestException(Response response, Exception e) {
+        response.badRequest().contentType(ResponseFormat.JSON.getContentType()).write(e.getMessage());
     }
 
-    private void renderConflictException(Request request, Response response, Exception e) {
-        response.conflict().contentType(ResponseFormat.JSON.getContentType()).write("{\"message\" : \"" + e.getMessage() + "\"}"); 
+    private void renderConflictException(Response response, Exception e) {
+        response.conflict().contentType(ResponseFormat.JSON.getContentType()).write(e.getMessage()); 
     }
 
-    private void renderNotFound(Request request, Response response, Exception e) {
-       // response.notFound().contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(404));
-    }
-
-    private void renderUnExpected(Request request, Response response, Exception e) {
-        log.error(e.getMessage());
-        e.printStackTrace();
-    //    response.status(500).contentType(ResponseFormat.HTML.getContentType()).render("page-error.ftl", buildHashStateCodeHTTP(500));
+    private void renderNotFound(Response response, Exception e) {
+        response.notFound().contentType(ResponseFormat.HTML.getContentType()).render("404.ftl");
     }
     
-    private Map<String,Object> buildHashStateCodeHTTP(int code) {
-        Map<String, Object> info = new HashMap<String, Object>();
-        info.put("code", code);
-        return info;
+    private void renderUnauthorized(Response response) {
+        response.removeCookie(new Cookie(Login.COOKIE_N_IDENTIFICATION, null));
+        response.removeCookie(new Cookie(Login.COOKIE_SESSION_ID, null));
+        response.redirect("/");
     }
+
+    private void renderUnExpected(Response response, Exception e) {
+        log.error("Error no contemplado : " + e.getMessage());
+        e.printStackTrace();
+        response.status(500).contentType(ResponseFormat.HTML.getContentType()).render("500.ftl");
+    }
+
 }

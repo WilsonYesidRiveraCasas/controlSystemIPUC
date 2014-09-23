@@ -86,8 +86,11 @@ $(function() {
 				contentType: 'application/json',
 				data: JSON.stringify(getData()),
 				statusCode: {
+					400 : function(obj) {
+						errorNotificaction('Error registrando',obj.responseText);
+					},
 					409 : function() {
-						notificacionGenerica('Error registrando', 'La congregación ya existe' , 'error');
+						errorNotificaction('Error registrando',obj.responseText);
 				    }
 				}
 			}).done(function( msg ) {

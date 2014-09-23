@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import org.jogger.Jogger;
 import org.jogger.middleware.router.RouterMiddleware;
-import org.jogger.middleware.router.interceptor.Interceptor;
 import org.jogger.middleware.router.loader.ControllerLoader;
 import org.jogger.middleware.router.loader.FileSystemRoutesLoader;
 import org.jogger.middleware.statik.StaticMiddleware;
@@ -46,6 +45,7 @@ public class Server {
         router.addInterceptor(securityInterceptor);
 
         Jogger app = new Jogger(statik, router);
+        app.setExceptionHandler(new DefaultExceptionServerHandler());
 
         setTemplateEngine(app);
         app.listen(8000);

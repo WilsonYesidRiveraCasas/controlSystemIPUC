@@ -7,7 +7,7 @@ import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.controller.Login;
-import org.jogger.exception.NotFoundException;
+import org.jogger.exception.UnAuthorizedException;
 import org.jogger.http.Cookie;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
@@ -29,9 +29,8 @@ public class SecurityInterceptor implements Interceptor {
     private PastorManager pastorManager;
 
     @Override
-    public void intercept(Request request, Response response, InterceptorExecution execution) throws Exception {
+    public void intercept(Request request, Response response, InterceptorExecution execution) throws UnAuthorizedException, Exception {
         
-
         boolean requireAuth = requiresAuthentication(execution);
         if(requireAuth) {
             manageDataPastorToReponse(request, response);
@@ -51,47 +50,56 @@ public class SecurityInterceptor implements Interceptor {
         return requiresAuth;
     }
     
-    private void manageDataPastorToReponse(Request request, Response response) throws Exception {
+    private void manageDataPastorToReponse(Request request, Response response) throws UnAuthorizedException, Exception {
         
-        Auth auth = getAuth(request);
-        Pastor pastor = pastorManager.find(auth.getNumeroIdentificacion());
+        Auth auth = getAuth(request, response);
         
-        if(pastor == null) {
+        if(auth != null) {
+            Pastor pastor = pastorManager.find(auth.getNumeroIdentificacion());
+        
+            if(pastor == null) {
+                response.removeCookie(new Cookie(Login.COOKIE_N_IDENTIFICATION, null));
+                response.removeCookie(new Cookie(Login.COOKIE_SESSION_ID, null));
+                response.redirect("/");
+            }
+
+            response.setAttribute("pastor", pastor);
+        } else {
             response.removeCookie(new Cookie(Login.COOKIE_N_IDENTIFICATION, null));
             response.removeCookie(new Cookie(Login.COOKIE_SESSION_ID, null));
             response.redirect("/");
-        }
-        
-        response.setAttribute("pastor", pastor);
-        
+        }       
     }
     
-    private Auth getAuth(Request request) throws NotFoundException, Exception {
+    private Auth getAuth(Request request, Response response) throws UnAuthorizedException, Exception {
         Cookie n_identification = request.getCookie(Login.COOKIE_N_IDENTIFICATION);
-        if(n_identification == null) {
-            return null;
-        }
-
         Cookie sessionId = request.getCookie(Login.COOKIE_SESSION_ID);
-        if(sessionId == null) {
-            return null;
-        }
-
-        Auth auth = authManager.findBySession(n_identification.getValue(), sessionId.getValue());
         
-        if(auth == null) {
-            throw new NotFoundException();
+        Auth auth = null;
+        
+        if(n_identification != null && sessionId != null) {
+            auth = authManager.findBySession(n_identification.getValue(), sessionId.getValue());
+        
+            if(auth == null) {
+                throw new UnAuthorizedException("Not found session auth");
+            }
         }
+        
+        if(n_identification == null && sessionId != null) {
+            response.removeCookie(new Cookie(Login.COOKIE_SESSION_ID, null));
+        } else if(n_identification != null && sessionId == null) {
+            response.removeCookie(new Cookie(Login.COOKIE_N_IDENTIFICATION, null));
+        }      
 
         return auth;
     }
     
-    private void manageSecuredRequest(Response response, InterceptorExecution execution) throws Exception {
+    private void manageSecuredRequest(Response response, InterceptorExecution execution) throws UnAuthorizedException, Exception{
         Pastor pastor = (Pastor) response.getAttributes().get("pastor");
 
         if (pastor == null) {
             log.info("Render not found for not authorized resource");
-            throw new NotFoundException();
+            throw new UnAuthorizedException("Pastor not exists in response's attributes");
         }
 
         //check if require role validation
@@ -100,7 +108,7 @@ public class SecurityInterceptor implements Interceptor {
             if (pastor.getRoles().contains(roleValidation)) {
                 execution.proceed();
             } else {
-                throw new NotFoundException();
+                response.redirect("/home");
             }
         } else {
             execution.proceed();

@@ -26,8 +26,11 @@ $(function() {
 				contentType: 'application/json',
 				data: JSON.stringify(getData()),
 				statusCode: {
+					400 : function(obj) {
+						errorNotificaction(obj.responseText);
+					},
 					409 : function() {
-						errorNotificaction('El pastor ya existe');
+						errorNotificaction(obj.responseText);
 				    }
 				}
 			}).done(function( msg ) {
