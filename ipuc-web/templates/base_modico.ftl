@@ -212,7 +212,7 @@
 														<span>Membresias</span>
 													</a>
 												</li>
-												<li>
+												<li <#if sectionmin = "registercreyente"> class="nav-active"</#if>>
 													<a href="/registerCreyente">
 														<i class="fa fa-user" aria-hidden="true"></i>
 														<span>Registrar creyente</span>
