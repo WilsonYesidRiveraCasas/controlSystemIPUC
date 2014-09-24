@@ -16,5 +16,7 @@ public interface MembresiaManager {
     public Membresia find(String cod_congregacion) throws Exception;
 
     public List<Membresia> findAll() throws Exception;
+    
+    public long getMembresia(int codCongregacion) throws Exception ;
 
 }

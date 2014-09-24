@@ -60,4 +60,21 @@ public class JPACongregacionManager implements CongregacionManager {
         }
     }
     
+    public Congregacion getCongregacionByPastor(String numIdentificacion) throws Exception {
+        try {
+            String jpa = " Select c from Congregacion c where c.pastor.numeroIdentificacion =:numIdentificacion";
+            Query query = entityManager.createQuery(jpa);
+            query.setParameter("numIdentificacion", numIdentificacion);
+            List result = query.getResultList();
+            
+            if(result == null || result.isEmpty()) {
+                return null;
+            }
+            
+            return (Congregacion) result.get(0);
+        } catch(Exception e) {
+            throw new Exception("Error buscando la congregación administrada por el pastor " + numIdentificacion);
+        }
+    }
+    
 }

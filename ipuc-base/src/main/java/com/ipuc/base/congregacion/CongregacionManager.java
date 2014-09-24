@@ -18,5 +18,7 @@ public interface CongregacionManager {
     public List<Congregacion> findAll() throws Exception;
     
     public long countCongregacion() throws Exception;
+    
+    public Congregacion getCongregacionByPastor(String numIdentificacion) throws Exception;
 
 }
