@@ -1,7 +1,9 @@
 
 package com.ipuc.web.controller;
 
+import com.ipuc.base.congregacion.Congregacion;
 import com.ipuc.base.congregacion.CongregacionManager;
+import com.ipuc.base.membresia.MembresiaManager;
 import com.ipuc.base.persona.CreyenteManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
@@ -28,6 +30,8 @@ public class Index {
     
     private CreyenteManager creyenteManager;
     
+    private MembresiaManager membresiaManager;
+    
     public void loginForm(Request request, Response response) {
         Cookie n_identification = request.getCookie(COOKIE_N_IDENTIFICATION);
         if(n_identification != null) {
@@ -51,12 +55,20 @@ public class Index {
         } else {
             if(roles.contains(Pastor.ROL_DIRECTIVO)) {
                 getInfoResponseDirectivo(info);
-            }            
+            } else {
+                getInfoResponsePastor(info, pastor);
+            }        
         }        
         info.put("pastor", pastor);
         
         response.contentType(ResponseFormat.HTML.getContentType()).render("home.ftl", info);
         
+    }
+    
+    private void getInfoResponsePastor(Map<String, Object> info, Pastor pastor) throws Exception {
+        Congregacion congregacion = congregacionManager.getCongregacionByPastor(pastor.getNumeroIdentificacion());
+        long countMembresia = membresiaManager.getMembresia(congregacion.getCodCongregacion());
+        info.put("numCreyentes", countMembresia);
     }
    
     private void getInfoResponseDirectivo(Map<String, Object> info) throws Exception {
@@ -95,4 +107,8 @@ public class Index {
         this.creyenteManager = creyenteManager;
     }
 
+    public void setMembresiaManager(MembresiaManager membresiaManager) {
+        this.membresiaManager = membresiaManager;
+    }
+    
 }

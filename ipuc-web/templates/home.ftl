@@ -5,6 +5,7 @@
 						
 	<div class="col-md-6 col-lg-12 col-xl-6">
 		<div class="row">
+		<#if pastor.esDirectivo() >
 			<div class="col-md-12 col-lg-6 col-xl-6">
 				<section class="panel panel-featured-left panel-featured-primary">
 					<div class="panel-body">
@@ -53,6 +54,7 @@
 					</div>
 				</section>
 			</div>
+			</#if>
 			<!--div class="col-md-12 col-lg-6 col-xl-6">
 				<section class="panel panel-featured-left panel-featured-tertiary">
 					<div class="panel-body">

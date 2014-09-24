@@ -42,7 +42,7 @@
 					<div class="col-sm-12">
 						<div class="main-error mb-xlg">
 							<h2 class="error-code text-dark text-center text-semibold m-none">500 <i class="fa fa-file"></i></h2>
-							<p class="error-explanation text-center">Lo sentimos, el recurso solicitado no existe</p>
+							<p class="error-explanation text-center">Lo sentimos, ha ocurrido un error no esperado</p>
 						</div>
 					</div>
 				</div>

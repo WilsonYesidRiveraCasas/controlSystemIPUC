@@ -123,6 +123,26 @@
 					<div class="nano">
 						<div class="nano-content">
 							<hr class="separator" />
+							<div class="sidebar-widget widget-stats">
+								<div class="widget-header">
+									<h6>Panel principal</h6>
+									<div class="widget-toggle">+</div>
+								</div>
+								<div class="widget-content">
+									<nav id="menu" class="nav-main" role="navigation">
+										<ul class="nav nav-main">
+											<li <#if sectionmin = "home"> class="nav-active"</#if> >
+												<a href="/home">
+													<i class="fa fa-home" aria-hidden="true"></i>
+													<span>Inicio</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+							<hr class="separator" />
+
 							<#if pastor.esConsistorio()>
 
 								<div class="sidebar-widget widget-stats">
@@ -156,21 +176,16 @@
 										<div class="widget-content">
 											<nav id="menu" class="nav-main" role="navigation">
 												<ul class="nav nav-main">
-													<li <#if sectionmin = "home"> class="nav-active"</#if> >
-														<a href="/home">
-															<i class="fa fa-home" aria-hidden="true"></i>
-															<span>Inicio</span>
-														</a>
-													</li>									
+																						
 													<li <#if sectionmin = "registerpastor"> class="nav-active"</#if> >
 														<a href="/registerPastor">
-															<i class="fa fa-users" aria-hidden="true"></i>
+															<i class="fa fa-user" aria-hidden="true"></i>
 															<span>Registrar pastor</span>
 														</a>
 													</li>
 													<li <#if sectionmin = "registercongregacion"> class="nav-active"</#if> >
 														<a href="/registerCongregacion">
-															<i class="fa fa-users" aria-hidden="true"></i>
+															<i class="fa fa-university" aria-hidden="true"></i>
 															<span>Registrar congregación</span>
 														</a>
 													</li>
@@ -190,11 +205,17 @@
 									</div>
 									<div class="widget-content">
 										<nav id="menu" class="nav-main" role="navigation">
-											<ul class="nav nav-main">
+											<ul class="nav nav-main">											
 												<li>
 													<a href="#">
-														<i class="fa fa-home" aria-hidden="true"></i>
+														<i class="fa fa-users" aria-hidden="true"></i>
 														<span>Membresias</span>
+													</a>
+												</li>
+												<li>
+													<a href="/registerCreyente">
+														<i class="fa fa-user" aria-hidden="true"></i>
+														<span>Registrar creyente</span>
 													</a>
 												</li>
 											</ul>
