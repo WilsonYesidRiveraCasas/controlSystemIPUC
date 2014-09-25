@@ -35,7 +35,7 @@ $(function() {
 			$.ajax({
 				type: "POST",
 				url: "/registerCreyente",
-				contentType: 'application/json',
+				contentType: 'application/json;charset=UTF-8',
 				data: JSON.stringify(getData()),
 				statusCode: {
 					400 : function(obj) {
@@ -44,10 +44,15 @@ $(function() {
 					409 : function(obj) {
 						notificacionGenerica('Alerta', obj.responseText, 'error');
 				    }
-				}
+				}, beforeSend : function(xhr) {
+	                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	                $.blockUI({ message: '<h3>Un momento por favor ...</h3>' }); 
+	            },
 			}).done(function( msg ) {
 				notificacionGenerica('Registro exitoso', 'Podrás continuar registrando creyentes', 'success');
 			    resetForm();
+			}).complete(function() {
+				$.unblockUI();
 			});
 		} else {
 			notificacionGenerica('Error', 'Faltan datos requeridos', 'error');
@@ -96,9 +101,10 @@ $(function() {
 		var p_apellido = elementValidate($('#f_apellido'));
 		var sexo = elementValidate($('#sexo'));
 		var s_civil = elementValidate($('#s_civil'));
-		var date_naci = elementValidate($('#date_naci'));		
+		var date_naci = elementValidate($('#date_naci'));
+		var date_bauti = elementValidate($('#date_bauti'));
 
-		return num_identi && tipo_identi && p_name && p_apellido && sexo && s_civil && date_naci; 
+		return num_identi && tipo_identi && p_name && p_apellido && sexo && s_civil && date_naci && date_bauti; 
 	}
 
 	function elementValidate(element) {

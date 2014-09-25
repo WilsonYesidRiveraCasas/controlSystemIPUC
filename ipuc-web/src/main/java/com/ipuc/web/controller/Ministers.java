@@ -1,14 +1,26 @@
 
 package com.ipuc.web.controller;
 
+import com.ipuc.base.ceremonia.Ceremonia;
+import com.ipuc.base.ceremonia.CeremoniaManager;
+import com.ipuc.base.congregacion.Congregacion;
+import com.ipuc.base.congregacion.CongregacionManager;
+import com.ipuc.base.membresia.Membresia;
+import com.ipuc.base.membresia.MembresiaManager;
+import com.ipuc.base.persona.Creyente;
+import com.ipuc.base.persona.CreyenteManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
+import com.ipuc.base.persona.Persona;
 import com.ipuc.base.persona.PersonaManager;
 import com.ipuc.web.annotation.Secured;
+import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
+import com.ipuc.web.form.CreyenteForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.list.CivilStateFormat;
 import com.ipuc.web.list.IdentificationTypeFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +44,14 @@ public class Ministers {
     
     private PersonaManager personaManager;
     
+    private CreyenteManager creyenteManager;
+    
+    private CongregacionManager congregacionManager;
+    
+    private MembresiaManager membresiaManager;
+    
+    private CeremoniaManager ceremoniaManager;
+    
     @Secured(role=Pastor.ROL_PASTOR)
     public void registerCreyenteForm(Request request, Response response) {
         
@@ -48,7 +68,23 @@ public class Ministers {
     
     @Secured(role=Pastor.ROL_PASTOR)
     @Transactional(rollbackFor=Exception.class)
-    public void registerCreyente(Request request, Response response) {
+    public void registerCreyente(Request request, Response response) throws BadRequestException, ConflictException, Exception {
+        System.out.println("request.getContentType() " + request.getContentType());
+        response.contentType("application/json; charset=UTF-8");
+        log.info("Minister register request /registerCreyente");
+        CreyenteForm form = CreyenteForm.parse(request);
+        Creyente aux = creyenteManager.find(form.getNumIdentificacion());
+        
+        if(aux != null) {
+            throw new ConflictException("El creyente ya existe");
+        }
+        
+        Creyente creyente = buildCreyente(response, form);
+        creyenteManager.create(creyente);
+        
+        createMembresia(creyente, creyente.getCongregacion());
+        
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
         
     }
     
@@ -61,6 +97,72 @@ public class Ministers {
         }
         
         response.status(200).contentType(ResponseFormat.JSON.getContentType()).write(getResponsePastores(pastores));
+        
+    }
+    
+    private Creyente buildCreyente(Response response, CreyenteForm form) throws Exception {
+        Creyente creyente = new Creyente();
+        Persona persona = createPerson(form);
+        Pastor pastor = getPastorFromResponse(response);
+        Ceremonia bautismo = createCeremoniaBautizo(form);        
+        
+        //Data creyente
+        creyente.setNumeroIdentificacion(form.getNumIdentificacion());
+        creyente.setRecepEspirituSanto(form.getFechaRecepcionES());
+        Congregacion congregacion = congregacionManager.getCongregacionByPastor(pastor.getNumeroIdentificacion());
+        creyente.setCongregacion(congregacion);
+        creyente.setPersona(persona);
+        creyente.setCeremoniaBautizo(bautismo);
+        
+        return creyente;
+    }
+    
+    private Ceremonia createCeremoniaBautizo(CreyenteForm form) throws Exception {
+        Ceremonia bautismo = new Ceremonia();
+        bautismo.setFechaCelebracion(form.getFechaBautizo());
+        bautismo.setLugar(form.getLugarCeremonia());
+        Pastor pastorOficiante;
+        if(form.getPastorOficiante() != null) {
+           pastorOficiante = pastorManager.find(form.getPastorOficiante());
+        } else {
+            pastorOficiante = null;
+        }       
+        bautismo.setPastorOficiante(pastorOficiante);
+        ceremoniaManager.create(bautismo);
+        
+        return bautismo;
+    }
+    
+    private void createMembresia(Creyente creyente, Congregacion congregacion) throws Exception {
+        Membresia membresia = new Membresia();
+        membresia.setCongregacion(congregacion);
+        membresia.setCreyente(creyente);
+        membresia.setFechaIngreso(new Date());
+        membresiaManager.create(membresia);
+    }
+    
+    private Persona createPerson (CreyenteForm form) throws ConflictException, Exception {
+        
+        Persona persona = new Persona();
+        
+        persona.setNumeroIdentificacion(form.getNumIdentificacion());
+        persona.setTipoIdentificacion(form.getTipoIdentificacion());
+        persona.setPrimerNombre(form.getP_nombre());
+        persona.setSegundoNombre(form.getS_nombre());
+        persona.setPrimerApellido(form.getP_apellido());
+        persona.setSegundoApellido(form.getS_apellido());
+        persona.setSexo(form.getSexo());
+        persona.setEstadoCivil(form.getEstadoCivil());
+        persona.setFechaNacimiento(form.getFechaNacimiento());
+        persona.setLugarNacimiento(form.getLugarNacimiento());
+        persona.setTelefono(form.getTelefono());
+        persona.setEmail(form.getCorreo());
+        persona.setPadre(form.getNombrePadre());
+        persona.setMadre(form.getNombreMadre());
+        
+        personaManager.create(persona);
+        
+        return persona;
         
     }
     
@@ -91,4 +193,20 @@ public class Ministers {
         this.personaManager = personaManager;
     }
 
+    public void setCreyenteManager(CreyenteManager creyenteManager) {
+        this.creyenteManager = creyenteManager;
+    }
+
+    public void setCongregacionManager(CongregacionManager congregacionManager) {
+        this.congregacionManager = congregacionManager;
+    }
+
+    public void setMembresiaManager(MembresiaManager membresiaManager) {
+        this.membresiaManager = membresiaManager;
+    }
+
+    public void setCeremoniaManager(CeremoniaManager ceremoniaManager) {
+        this.ceremoniaManager = ceremoniaManager;
+    }
+       
 }

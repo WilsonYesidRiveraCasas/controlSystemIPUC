@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface CeremoniaManager {
 
-    public void create(Ceremonia ceremonia);
+    public void create(Ceremonia ceremonia) throws Exception;
 
     public void update(Ceremonia ceremonia) throws Exception;
 

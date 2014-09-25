@@ -166,13 +166,13 @@
 	<div class="panel-body">
 		<div class="form-group">
 			<campo>
-				<label class="col-md-2 control-label">Fecha bautizo </label>
+				<label class="col-md-2 control-label">Fecha bautizo <span class="required">*</span></label>
 				<div class="col-md-4">
 					<div class="input-group">
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
-						<input type="text" data-plugin-datepicker class="form-control" id="date_bauti">
+						<input type="text" data-plugin-datepicker class="form-control" id="date_bauti" required>
 					</div>
 				</div>
 			</campo>

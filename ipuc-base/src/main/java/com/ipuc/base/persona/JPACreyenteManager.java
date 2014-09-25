@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +25,15 @@ public class JPACreyenteManager implements CreyenteManager {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Creyente creyente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional
+    public void create(Creyente creyente) throws Exception {
+        try {
+            entityManager.persist(creyente);
+            entityManager.flush();
+        } catch (Exception e) {
+            log.error("Exception creating creyente", e);
+            throw e;
+        }
     }
 
     public void update(Creyente creyente) throws Exception {
@@ -33,7 +41,11 @@ public class JPACreyenteManager implements CreyenteManager {
     }
 
     public Creyente find(String num_identificacion) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return entityManager.find(Creyente.class, num_identificacion);
+        } catch (Exception e) {
+            throw new Exception("Exception loading creyente with identification : " + num_identificacion + ". Message: " + e.getMessage(), e);
+        }
     }
 
     public List<Creyente> findAll() throws Exception {

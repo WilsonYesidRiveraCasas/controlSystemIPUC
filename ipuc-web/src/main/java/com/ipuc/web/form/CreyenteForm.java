@@ -69,7 +69,7 @@ public class CreyenteForm {
             register.setTipoIdentificacion(getTipoIdentificacion(json.getString("tipo_identi")));
             register.setNumIdentificacion(Preconditions.getNotEmpty(json.getString("num_identi"), "El número de indetificación es requerido"));
             register.setP_nombre(Preconditions.getNotEmpty(json.getString("p_name"), "El primer nombre es requerido"));
-            register.setS_apellido(json.getString("s_name"));
+            register.setS_nombre(json.getString("s_name"));
             register.setP_apellido(Preconditions.getNotEmpty(json.getString("p_apellido"), "El primer apellido es requerido"));
             register.setS_apellido(json.getString("s_apellido"));
             register.setSexo(getSexo(json.getString("sexo")));
@@ -79,9 +79,9 @@ public class CreyenteForm {
             register.setTelefono(json.getString("tele"));
             register.setCorreo(validateCorreo(json.getString("correo")));
             register.setNombrePadre(json.getString("name_papa"));
-            register.setNombreMadre("name_madre");
+            register.setNombreMadre(json.getString("name_madre"));
             register.setFechaRecepcionES(Preconditions.getDate(json.getString("date_e_s")));
-            register.setFechaBautizo(Preconditions.getDate(json.getString("date_bauti")));
+            register.setFechaBautizo(Preconditions.notNullDate(json.getString("date_bauti"), "Fecha de bautismo requerida"));
             register.setLugarCeremonia(json.getString("l_cere"));
             register.setPastorOficiante(json.getString("pastor_ofi"));
             

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MembresiaManager {
 
-    public void create(Membresia membresia);
+    public void create(Membresia membresia) throws Exception;
 
     public void update(Membresia membresia) throws Exception;
 

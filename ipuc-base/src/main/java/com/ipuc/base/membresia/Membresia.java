@@ -61,7 +61,7 @@ public class Membresia implements Serializable {
 
     @NotNull
     @Column(name = "fecha_ingreso")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getFechaIngreso() {
         return fechaIngreso;
     }
@@ -71,7 +71,7 @@ public class Membresia implements Serializable {
     }
 
     @Column(name = "fecha_salida")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getFechaSalida() {
         return fechaSalida;
     }
