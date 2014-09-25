@@ -27,32 +27,30 @@ $(function() {
 				data: JSON.stringify(getData()),
 				statusCode: {
 					400 : function(obj) {
-						errorNotificaction(obj.responseText);
+						notificacionGenerica('Error', obj.responseText, 'error');
 					},
-					409 : function() {
-						errorNotificaction(obj.responseText);
+					409 : function(obj) {
+						notificacionGenerica('Alerta', obj.responseText, 'error');
 				    }
+				},
+				beforeSend : function() {
+					$.blockUI({ message: '<h3>Un momento por favor ...</h3>' });
 				}
 			}).done(function( msg ) {
-				sucessNotificaction();
+				notificacionGenerica('Registro exitoso', 'Podrás continuar registrando', 'success');
 			    resetForm();
+			}).complete(function() {
+				$.unblockUI();
 			});
 		}
 	};
 
-	function sucessNotificaction() {
+	function notificacionGenerica(titulo, texto, tipo) {
 		new PNotify({
-			title: 'Registro Exitoso',
-			text: 'Podrás seguir registrando.',
-			type: 'success'
-		});
-	}
-
-	function errorNotificaction(msj) {
-		new PNotify({
-			title : 'Error registrando',
-			text : msj,
-			type : 'error'
+			title : titulo,
+			text : texto,
+			type : tipo,
+			icon: false
 		});
 	}
 

@@ -2,8 +2,7 @@
 package com.ipuc.web.form;
 
 import com.ipuc.web.exception.BadRequestException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.ipuc.web.util.Preconditions;
 import java.util.Date;
 import org.jogger.http.Request;
 import org.json.JSONException;
@@ -42,10 +41,13 @@ public class CongregacionRegisterForm {
             register.setNombre(validaNombre(json.getString("nombre")));
             register.setDireccion(validaDireccion(json.getString("direccion")));
             register.setTelefono(validaDireccion(json.getString("telefono")));
-            register.setFecha_apertura(validaFechaApertura(json.getString("fecha_apertura")));
+            register.setFecha_apertura(Preconditions.notNullDate(json.getString("fecha_apertura"), "Fecha de apertura requerida"));
             register.setIdMunicipio(validaMunicipio(json.getString("municipio")));
             register.setNum_identi_pastor(json.getString("pastor"));
             return register;
+        } catch(IllegalArgumentException e) {
+            log.error("Error parsing request register congregation. " + e.getMessage());
+            throw new BadRequestException(e.getMessage());
         } catch(JSONException e) {
             log.error("Error parsing CongregacionRegisterForm. Message: " + e.getMessage());
             throw new BadRequestException("Error manejando la petición. Inténtelo de nuevo y si persiste contáctese con el administrador");
@@ -53,10 +55,7 @@ public class CongregacionRegisterForm {
     }
     
     private static String validaNombre(String nombre) throws BadRequestException {
-        if(nombre == null || nombre.isEmpty()) {
-            throw new BadRequestException("El nombre de la congregación es requerido");
-        }
-        
+        Preconditions.notEmpty(nombre, "El nombre de la congregación es requerido");
         if(nombre.length() > 50) {
             nombre = nombre.substring(0, 49);
         }
@@ -65,37 +64,16 @@ public class CongregacionRegisterForm {
     }
     
     private static String validaDireccion(String direccion) throws BadRequestException {
-        if(direccion == null || direccion.isEmpty()) {
-            throw new BadRequestException("La dirección de la congregación es requerida");
-        }
-        
+        Preconditions.notEmpty(direccion, "La dirección de la congregación es requerida");
         if(direccion.length() > 200) {
             direccion = direccion.substring(0, 199);
         }
         
         return direccion;
     }
-    
-    private static Date validaFechaApertura(String fecha) throws BadRequestException {
-        if(fecha == null || fecha.isEmpty()) {
-            throw new BadRequestException("La fecha de la congregación es requerida");
-        }
         
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("MM/dd/yyyy");
-        Date nuevaFecha = null;
-        try {
-            nuevaFecha = formatoFecha.parse(fecha);
-        } catch (ParseException ex) {
-            throw new BadRequestException("Formato de fecha inválida");
-        }
-        
-        return nuevaFecha;
-    }
-    
     private static int validaMunicipio(String muncipio) throws BadRequestException {
-        if(muncipio == null || muncipio.isEmpty()) {
-            throw new BadRequestException("La dirección de la congregación es requerida");
-        }
+        Preconditions.notEmpty(muncipio, "La dirección de la congregación es requerida");
         
         if(muncipio.length() > 11) {
             muncipio = muncipio.substring(0, 10);

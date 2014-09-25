@@ -8,7 +8,6 @@ import org.jogger.exception.UnAuthorizedException;
 import org.jogger.http.Cookie;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
