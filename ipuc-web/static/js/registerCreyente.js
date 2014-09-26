@@ -87,7 +87,7 @@ $(function() {
 			date_e_s : $('#date_e_s').val(),
 			date_bauti : $('#date_bauti').val(),
 			l_cere : $('#l_cere').val(),
-			pastor_ofi : $('#pastor_ofi').val()
+			pastor_ofi : $('#pastor_ofi').val() == null ? "" : $('#pastor_ofi').val()
 		};
 
 		return data;
@@ -103,12 +103,17 @@ $(function() {
 		var s_civil = elementValidate($('#s_civil'));
 		var date_naci = elementValidate($('#date_naci'));
 		var date_bauti = elementValidate($('#date_bauti'));
+		var pastor_ofi = elementValidate($("#pastor_ofi"));
 
-		return num_identi && tipo_identi && p_name && p_apellido && sexo && s_civil && date_naci && date_bauti; 
+		return num_identi && tipo_identi && p_name && p_apellido && sexo && s_civil && date_naci && date_bauti && pastor_ofi; 
 	}
 
 	function elementValidate(element) {
-		var validate = $(element).val().length > 0;
+		var value = "";
+		if($(element).val() != null) {
+			value = $(element).val()
+		}
+		var validate = value.length > 0;
 		if(!validate) {
 			$(element).closest('campo').removeClass('has-success').addClass('has-error');			
 		} else {
@@ -158,7 +163,7 @@ $(function() {
         }
     });
 
-	$('select').change(function(e){
+	$('select:required').change(function(e){
 		elementValidate($(this));
 	});
 

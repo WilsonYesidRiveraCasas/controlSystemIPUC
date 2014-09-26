@@ -186,10 +186,11 @@
 
 		<div class="form-group">
 			<campo>	
-				<label class="col-md-2 control-label">Pastor oficiante</label>
+				<label class="col-md-2 control-label">Pastor oficiante <span class="required">*</span></label>
 				<div class="col-md-4">
-					<select data-plugin-selectTwo class="form-control populate" id = "pastor_ofi" name="pastor_oficiante" title="Por favor seleccione un pastor" disabled="">
+					<select data-plugin-selectTwo class="form-control populate" id = "pastor_ofi" name="pastor_oficiante" title="Por favor seleccione un pastor" required>
 						<optgroup label="Seleccione un pastor">
+							<option value = "">Por favor cargue pastores</option>
 						</optgroup>						
 					</select>
 				</div>

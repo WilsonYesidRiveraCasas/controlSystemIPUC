@@ -110,6 +110,9 @@ public class Ministers {
         creyente.setNumeroIdentificacion(form.getNumIdentificacion());
         creyente.setRecepEspirituSanto(form.getFechaRecepcionES());
         Congregacion congregacion = congregacionManager.getCongregacionByPastor(pastor.getNumeroIdentificacion());
+        if(congregacion == null) {
+            throw new ConflictException("No es posible crear creyentes porque el pastor " + pastor.nombreApellido() + " no tiene congregación");
+        }
         creyente.setCongregacion(congregacion);
         creyente.setPersona(persona);
         creyente.setCeremoniaBautizo(bautismo);

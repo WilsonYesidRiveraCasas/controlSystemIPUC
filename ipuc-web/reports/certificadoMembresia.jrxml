@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificadoMembresia" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f3f5c75d-5964-4c16-8677-cc2523ae7daa">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="52ea9deb-a4f4-4ce9-8d90-71e6ef202f6c"/>
+	<parameter name="nombreCongregacion" class="java.lang.String"/>
+	<parameter name="nombreCreyente" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="216" y="0" width="150" height="50" uuid="369a0123-52ed-478f-87ef-ab935c0561ee"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Certificado]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="54" y="0" width="312" height="20" uuid="8650043f-eef3-41f9-863c-ee417c195e85"/>
+				<text><![CDATA[La Iglesia Pentecostal Unida de Colombia le da la bienvenida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="20" width="92" height="20" uuid="ced7a0e2-edb7-4c86-90ae-4997ccedc2d7"/>
+				<text><![CDATA[a la congregación ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="146" y="20" width="100" height="20" uuid="e1922f3d-1de8-422d-9f76-d37fcf80a2f3"/>
+				<textFieldExpression><![CDATA[$P{nombreCongregacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="246" y="20" width="220" height="20" uuid="1e762bfc-bd22-413f-a96a-3352e5bf8fa1"/>
+				<text><![CDATA[. Que Dios le bendiga.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="366" y="0" width="100" height="20" uuid="652497f0-7586-4fbd-9444-106dc0fee8c7"/>
+				<textFieldExpression><![CDATA[$P{nombreCreyente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

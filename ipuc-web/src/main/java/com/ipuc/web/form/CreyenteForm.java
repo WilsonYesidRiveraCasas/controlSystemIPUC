@@ -127,7 +127,7 @@ public class CreyenteForm {
     
     private static String validateCorreo(String correo) throws BadRequestException { 
         if(correo == null || correo.isEmpty()) {
-            throw new BadRequestException("El correo es requerido");
+            return null;
         }
         boolean is_valid = RegexValidator.isValidateEmail(correo);
         if(!is_valid) {
