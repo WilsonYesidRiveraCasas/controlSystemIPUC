@@ -5,6 +5,7 @@ import com.ipuc.base.ceremonia.Ceremonia;
 import com.ipuc.base.ceremonia.CeremoniaManager;
 import com.ipuc.base.congregacion.Congregacion;
 import com.ipuc.base.congregacion.CongregacionManager;
+import com.ipuc.base.exception.ReportException;
 import com.ipuc.base.membresia.Membresia;
 import com.ipuc.base.membresia.MembresiaManager;
 import com.ipuc.base.persona.Creyente;
@@ -13,6 +14,7 @@ import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.base.persona.Persona;
 import com.ipuc.base.persona.PersonaManager;
+import com.ipuc.base.util.ReportsProcessor;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.exception.ConflictException;
@@ -20,10 +22,15 @@ import com.ipuc.web.form.CreyenteForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.list.CivilStateFormat;
 import com.ipuc.web.list.IdentificationTypeFormat;
+import com.ipuc.web.util.Random;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import org.jogger.asset.Asset;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
 import org.json.JSONArray;
@@ -69,8 +76,6 @@ public class Ministers {
     @Secured(role=Pastor.ROL_PASTOR)
     @Transactional(rollbackFor=Exception.class)
     public void registerCreyente(Request request, Response response) throws BadRequestException, ConflictException, Exception {
-        System.out.println("request.getContentType() " + request.getContentType());
-        response.contentType("application/json; charset=UTF-8");
         log.info("Minister register request /registerCreyente");
         CreyenteForm form = CreyenteForm.parse(request);
         Creyente aux = creyenteManager.find(form.getNumIdentificacion());
@@ -83,9 +88,34 @@ public class Ministers {
         creyenteManager.create(creyente);
         
         createMembresia(creyente, creyente.getCongregacion());
+        byte[] bytesPdf = renderReportMembresia(creyente);
+        responsePdf(response, bytesPdf);
+    }
+    
+    private byte[] renderReportMembresia(Creyente creyente) {
         
-        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
-        
+        Map<String, Object> info = new HashMap<String, Object>();
+        info.put("nombreCreyente", creyente.getPersona().nombreCompleto());
+        info.put("nombreCongregacion", creyente.getCongregacion().getNombre());
+        info.put("nombrePastor", creyente.getCongregacion().getPastor().getPersona().nombreCompleto());
+        info.put("tipoIdentificacion", IdentificationTypeFormat.getNombreTipoIdenti(creyente.getPersona().getTipoIdentificacion()));
+        info.put("numIdentificacion", creyente.getNumeroIdentificacion());
+        byte[] bytes;
+        try {
+            bytes = ReportsProcessor.process("certificadoMembresia", info);
+        } catch (ReportException ex) {
+            log.error("No fue posible renderizar el reporte de certificado de membresias. Message " + ex.getMessage());
+            bytes = null;
+        }
+        return bytes;
+    }
+    
+    private void responsePdf(Response response, byte[] bytes) {
+        InputStream in = new ByteArrayInputStream(bytes);
+        String nombre = Random.generateString(30) + ".pdf";
+        String contentType = ResponseFormat.PDF.getContentType();
+        Asset asset = new Asset(in, nombre, contentType, bytes.length);
+        response.contentType(ResponseFormat.PDF.getContentType()).write(asset);
     }
     
     @Secured(role=Pastor.ROL_PASTOR)

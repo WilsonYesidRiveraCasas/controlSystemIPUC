@@ -16,7 +16,8 @@ public enum ResponseFormat {
 
     HTML("text/html; charset=UTF-8"),
     JSON("application/json"),
-    XML("application/xml");
+    XML("application/xml"),
+    PDF ("application/pdf");
 
     private String contentType;
 
