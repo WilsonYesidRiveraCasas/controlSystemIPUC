@@ -38,6 +38,8 @@ public class Creyente implements Serializable {
 
     private Congregacion congregacion;
     
+    private String estado;
+    
     private Persona persona;
 
     @Id
@@ -99,6 +101,17 @@ public class Creyente implements Serializable {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    @Column(name = "estado")
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
     
     
 

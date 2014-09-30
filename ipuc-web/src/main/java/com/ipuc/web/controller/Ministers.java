@@ -21,6 +21,7 @@ import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.CreyenteForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.list.CivilStateFormat;
+import com.ipuc.web.list.CreyenteStateFormat;
 import com.ipuc.web.list.IdentificationTypeFormat;
 import com.ipuc.web.util.Random;
 import java.io.ByteArrayInputStream;
@@ -153,6 +154,7 @@ public class Ministers {
         //Data creyente
         creyente.setNumeroIdentificacion(form.getNumIdentificacion());
         creyente.setRecepEspirituSanto(form.getFechaRecepcionES());
+        creyente.setEstado(CreyenteStateFormat.A.getState());
         Congregacion congregacion = congregacionManager.getCongregacionByPastor(pastor.getNumeroIdentificacion());
         if(congregacion == null) {
             throw new ConflictException("No es posible crear creyentes porque el pastor " + pastor.nombreApellido() + " no tiene congregación");
