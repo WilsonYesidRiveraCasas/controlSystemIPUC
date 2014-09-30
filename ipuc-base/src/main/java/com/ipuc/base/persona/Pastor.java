@@ -167,6 +167,15 @@ public class Pastor implements Serializable {
         return this.getPersona().getPrimerNombre() + " " + this.getPersona().getPrimerApellido();
     }
     
+    public String nombreLegal() {
+        String nombre = "";
+        nombre += this.getPersona().getPrimerApellido() + " ";
+        nombre += (this.getPersona().getSegundoApellido() != null ? this.getPersona().getSegundoApellido() + " " : "");
+        nombre += this.getPersona().getPrimerNombre() + " ";
+        nombre += (this.getPersona().getSegundoNombre() != null ? this.getPersona().getSegundoNombre() + " " : "");
+        return nombre;
+    }
+    
     public boolean esDirectivo() {
         return roles.contains(ROL_DIRECTIVO);
     }

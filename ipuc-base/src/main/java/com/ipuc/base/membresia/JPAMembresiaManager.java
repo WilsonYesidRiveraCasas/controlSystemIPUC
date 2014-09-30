@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -19,8 +20,15 @@ public class JPAMembresiaManager implements MembresiaManager {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Membresia membresia) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional
+    public void create(Membresia membresia) throws Exception {
+        try {
+            entityManager.persist(membresia);
+            entityManager.flush();
+        } catch (Exception e) {
+            log.error("Exception creating membresia", e);
+            throw e;
+        }
     }
 
     public void update(Membresia membresia) throws Exception {

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface CreyenteManager {
 
-    public void create(Creyente creyente);
+    public void create(Creyente creyente) throws Exception;
 
     public void update(Creyente creyente) throws Exception;
 

@@ -15,6 +15,8 @@ public interface PastorManager {
 
     public Pastor find(String num_identificacion) throws Exception;
     
+    public List<Pastor> findAll() throws Exception;
+    
     public long countPastores() throws Exception;
     
     public List<Pastor> getPastoresDelDistritoSinCongregacion() throws Exception;

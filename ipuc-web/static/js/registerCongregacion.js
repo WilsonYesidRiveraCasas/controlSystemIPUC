@@ -17,14 +17,17 @@ $(function() {
 			beforeSend : function(xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
+                $.blockUI({ message: '<h3>Un momento por favor ...</h3>' });
             }			
 		}).done(function(obj) {
 			buildMuinicipiosOptions(obj);
 		}). fail(function(error) {
 			switch(err.status) {
-                case 409 : errorNotificaction('El pastor ya existe');;
+                case 409 : notificacionGenerica('Alerta', 'No hay municipios disponibles', 'error');
                            break;
             }
+		}).complete(function() {
+			$.unblockUI();
 		});
 	});
 
@@ -40,14 +43,17 @@ $(function() {
 			beforeSend : function(xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
-            }			
+                $.blockUI({ message: '<h3>Un momento por favor ...</h3>' });
+            }		
 		}).done(function(obj) {
 			buildPastoresOption(obj);
 		}). fail(function(error) {
-			switch(err.status) {
-                case 409 : errorNotificaction('El pastor ya existe');;
+			switch(error.status) {
+                case 409 : notificacionGenerica('Alerta', 'No hay pastores disponibles', 'error');
                            break;
             }
+		}).complete(function() {
+			$.unblockUI();
 		});
 	});
 
@@ -87,15 +93,20 @@ $(function() {
 				data: JSON.stringify(getData()),
 				statusCode: {
 					400 : function(obj) {
-						errorNotificaction('Error registrando',obj.responseText);
+						notificacionGenerica('Error', obj.responseText, 'error');
 					},
 					409 : function() {
-						errorNotificaction('Error registrando',obj.responseText);
+						notificacionGenerica('Alerta', obj.responseText, 'error');
 				    }
+				},
+				beforeSend : function() {
+					$.blockUI({ message: '<h3>Un momento por favor ...</h3>' });
 				}
 			}).done(function( msg ) {
 				notificacionGenerica('Registro exitoso', 'Podrás continuar registrando congregaciones', 'sucess');
 			    resetForm();
+			}).complete(function() {
+				$.unblockUI();
 			});
 		} else {
 			notificacionGenerica('Datos incompletos', 'Se han señalado los campos que se requieren' , 'error');
@@ -106,7 +117,8 @@ $(function() {
 		new PNotify({
 			title : titulo,
 			text : texto,
-			type : tipo
+			type : tipo,
+			icon: false
 		});
 	}
 

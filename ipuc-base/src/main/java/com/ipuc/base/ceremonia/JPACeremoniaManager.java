@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -23,8 +24,15 @@ public class JPACeremoniaManager implements CeremoniaManager{
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(Ceremonia ceremonia) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional
+    public void create(Ceremonia ceremonia) throws Exception {
+        try {
+            entityManager.persist(ceremonia);
+            entityManager.flush();
+        } catch (Exception e) {
+            log.error("Exception creating ceremonia", e);
+            throw e;
+        }
     }
 
     public void update(Ceremonia ceremonia) throws Exception {

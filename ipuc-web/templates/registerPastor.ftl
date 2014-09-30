@@ -56,6 +56,7 @@
 </section>
 
 <#macro javascripts>
+	<script src = "../static/plugins/jquery.blockUI.js"></script>
 	<script src="../static/js/registerPastor.js" /></script>
 	<script src="../static/assets/vendor/pnotify/pnotify.custom.js"></script>
 </#macro>

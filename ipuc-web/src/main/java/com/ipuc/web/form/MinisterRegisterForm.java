@@ -4,6 +4,7 @@ package com.ipuc.web.form;
 import com.ipuc.base.util.RegexValidator;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.list.IdentificationTypeFormat;
+import com.ipuc.web.util.Preconditions;
 import org.jogger.http.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,9 +36,11 @@ public class MinisterRegisterForm {
             MinisterRegisterForm register = new MinisterRegisterForm();
             register.setT_identification(validateIdentificationType(json.getString("tipo_identi")));
             register.setN_identificacion(validateNumIdentification(json.getString("num_identi")));
-            register.setCorreo(validateCorreo(json.getString("correo")));
-            
+            register.setCorreo(validateCorreo(json.getString("correo")));            
             return register;
+        } catch(IllegalArgumentException e) {
+            log.error("Error parsing request register pastor. " + e.getMessage());
+            throw new BadRequestException(e.getMessage());
         } catch(JSONException e) {
             log.error("Error parsing MinisterRegisterForm. Message: " + e.getMessage());
             throw new BadRequestException("Error manejando la petición. Inténtelo de nuevo y si persiste contáctese con el administrador");
@@ -46,9 +49,7 @@ public class MinisterRegisterForm {
     
     private static String validateNumIdentification(String numIdentificacion) throws BadRequestException {
         
-        if(numIdentificacion == null || numIdentificacion.isEmpty()) {
-            throw new BadRequestException("El número de identificación es requerido");
-        }
+        Preconditions.notEmpty(numIdentificacion, "El número de identificación es requerido");
         
         if(numIdentificacion.length() > 50) {
             throw new BadRequestException("El número de identificación excede los 50 caracteres");
@@ -58,12 +59,7 @@ public class MinisterRegisterForm {
     }
     
     private static String validateCorreo(String correo) throws BadRequestException {
-        
-        
-        if(correo == null || correo.isEmpty()) {
-            throw new BadRequestException("El correo es requerido");
-        }
-        
+        Preconditions.notEmpty(correo, "El correo es requerido");
         boolean is_valid = RegexValidator.isValidateEmail(correo);
         if(!is_valid) {
             throw new BadRequestException("El correo es inválido");
@@ -73,9 +69,7 @@ public class MinisterRegisterForm {
     
     private static String validateIdentificationType(String identificationTypeCode) throws BadRequestException {
         
-        if(identificationTypeCode == null || identificationTypeCode.isEmpty()) {
-            throw new BadRequestException("El tipo de identificación es requerido");
-        }
+        Preconditions.notEmpty(identificationTypeCode, "Tipo de identificación requerido");
         
         boolean isValid = IdentificationTypeFormat.isValidCode(identificationTypeCode);
         if(!isValid) {

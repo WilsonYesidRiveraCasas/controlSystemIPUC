@@ -43,6 +43,22 @@ public class JPAPastorManager implements PastorManager {
         }
     }
     
+    public List<Pastor> findAll() throws Exception {
+        try {
+            String jpa = " Select p from Pastor p";
+            Query query = entityManager.createQuery(jpa);
+            List result = query.getResultList();
+            
+            if(result == null || result.isEmpty()) {
+                return null;
+            }
+            
+            return (List<Pastor>) result; 
+        } catch (Exception e) {
+            throw new Exception("Exception findAll pastor. Message: " + e.getMessage(), e);
+        }
+    }
+    
     public long countPastores() throws Exception {
         try {
             String strQuery = "select count(p) from Pastor p";

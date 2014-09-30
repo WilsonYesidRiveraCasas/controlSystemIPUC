@@ -148,5 +148,11 @@
       <version>2.3.19</version>
       <type>jar</type>
     </dependency>
+    
+    <dependency>
+	<groupId>net.sf.jasperreports</groupId>
+	<artifactId>jasperreports</artifactId>
+	<version>5.6.1</version>
+    </dependency>
   </dependencies>
 </project>

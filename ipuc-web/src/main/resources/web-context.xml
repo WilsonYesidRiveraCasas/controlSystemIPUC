@@ -25,6 +25,10 @@
     <bean id="ministers" class="com.ipuc.web.controller.Ministers">
         <property name="pastorManager" ref="pastorManager"/>
         <property name="personaManager" ref="personaManager"/>
+        <property name="creyenteManager" ref="creyenteManager"/>
+        <property name="congregacionManager" ref="congregacionManager"/>
+        <property name="membresiaManager" ref="membresiaManager"/>
+        <property name="ceremoniaManager" ref="ceremoniaManager"/>        
     </bean>
     <bean id="login" class="com.ipuc.web.controller.Login">
         <property name="pastorManager" ref="pastorManager"/>

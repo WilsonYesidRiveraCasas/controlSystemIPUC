@@ -44,6 +44,11 @@ public enum IdentificationTypeFormat {
         IdentificationTypeFormat validType = IdentificationTypeFormat.valueOf(code);
         return validType != null;
     }
+    
+    public static String getNombreTipoIdenti(String code) {
+        IdentificationTypeFormat tipo = IdentificationTypeFormat.valueOf(code);
+        return tipo.getNombreTipoIdenti();
+    }
 
     public String getCodeTipoIdenti() {
         return codeTipoIdenti;
