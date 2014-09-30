@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import org.jogger.asset.Asset;
 import org.jogger.http.Request;
 import org.jogger.http.Response;
@@ -88,8 +87,22 @@ public class Ministers {
         creyenteManager.create(creyente);
         
         createMembresia(creyente, creyente.getCongregacion());
-        byte[] bytesPdf = renderReportMembresia(creyente);
-        responsePdf(response, bytesPdf);
+        response.status(200).contentType(ResponseFormat.JSON.getContentType()).write("{}");
+    }
+    
+    @Secured(role=Pastor.ROL_PASTOR)
+    @Transactional(rollbackFor=Exception.class)
+    public void downloadCertificado(Request request, Response response) throws ConflictException, Exception {
+        String numIdentificacionCreyente = request.getPathVariable("numIdentificacion");
+        Creyente creyente = creyenteManager.find(numIdentificacionCreyente);
+        
+        if(creyente == null) {
+            throw new ConflictException("No es posible generar el certificado de membresía porque el creyente no existe");
+        }
+        
+        byte[] bytes = renderReportMembresia(creyente);
+        responsePdf(response, bytes);
+                
     }
     
     private byte[] renderReportMembresia(Creyente creyente) {
@@ -115,7 +128,8 @@ public class Ministers {
         String nombre = Random.generateString(30) + ".pdf";
         String contentType = ResponseFormat.PDF.getContentType();
         Asset asset = new Asset(in, nombre, contentType, bytes.length);
-        response.contentType(ResponseFormat.PDF.getContentType()).write(asset);
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + asset.getName() + "\"");
+        response.write(asset);
     }
     
     @Secured(role=Pastor.ROL_PASTOR)

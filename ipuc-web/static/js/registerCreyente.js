@@ -32,11 +32,13 @@ $(function() {
 	function execute () {
 		if(formValidate()) {
 
+			var datos = getData();
+
 			$.ajax({
 				type: "POST",
 				url: "/registerCreyente",
 				contentType: 'application/json;charset=UTF-8',
-				data: JSON.stringify(getData()),
+				data: JSON.stringify(datos),
 				statusCode: {
 					400 : function(obj) {
 						notificacionGenerica('Error', obj.responseText, 'error');
@@ -51,6 +53,8 @@ $(function() {
 			}).done(function( msg ) {
 				notificacionGenerica('Registro exitoso', 'Podrás continuar registrando creyentes', 'success');
 			    resetForm();
+			    $('.certificado-downloader').attr('src', '/creyente/' + datos.num_identi + '/report');
+			    
 			}).complete(function() {
 				$.unblockUI();
 			});

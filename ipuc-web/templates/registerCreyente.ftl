@@ -6,7 +6,7 @@
 
 
 <@layout.layout_base_modico stylesheets=stylesheets javascripts=javascripts title="Registro de Creyentes" section="Registro de Creyentes" sectionmin="registercreyente">
-
+<iframe class="certificado-downloader" src='about:blank' style="display:none"></iframe>
 <section class="panel">
 	<header class="panel-heading">
 

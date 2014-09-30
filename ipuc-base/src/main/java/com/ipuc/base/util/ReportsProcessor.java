@@ -36,7 +36,7 @@ public final class ReportsProcessor {
         String directoryForTemplateLoading = DEFAULT_PATH + report + EXTENSION_FILE;
         try {
             JasperReport ireport = (JasperReport) JRLoader.loadObjectFromFile(directoryForTemplateLoading);
-            JasperPrint jprint = JasperFillManager.fillReport(ireport, parametros);
+            JasperPrint jprint = JasperFillManager.fillReport(ireport, parametros, new JREmptyDataSource());
             return JasperExportManager.exportReportToPdf(jprint);
         } catch (JRException ex) {
             throw new ReportException("Error process report " + report + ". " + ex.getMessage());
