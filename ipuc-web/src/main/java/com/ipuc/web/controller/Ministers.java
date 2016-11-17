@@ -1,6 +1,9 @@
 
 package com.ipuc.web.controller;
 
+import com.elibom.jogger.asset.Asset;
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
 import com.ipuc.base.ceremonia.Ceremonia;
 import com.ipuc.base.ceremonia.CeremoniaManager;
 import com.ipuc.base.congregacion.Congregacion;
@@ -29,9 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.jogger.asset.Asset;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;

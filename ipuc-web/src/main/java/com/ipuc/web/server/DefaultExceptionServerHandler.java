@@ -1,12 +1,12 @@
 package com.ipuc.web.server;
 
+import com.elibom.jogger.ExceptionHandler;
+import com.elibom.jogger.exception.WebApplicationException;
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
 import com.ipuc.web.helper.ResponseFormat;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import org.jogger.ExceptionHandler;
-import org.jogger.exception.WebApplicationException;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

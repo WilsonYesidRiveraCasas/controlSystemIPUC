@@ -1,6 +1,7 @@
 
 package com.ipuc.web.form;
 
+import com.elibom.jogger.http.Request;
 import com.ipuc.base.util.RegexValidator;
 import com.ipuc.web.exception.BadRequestException;
 import com.ipuc.web.list.CivilStateFormat;
@@ -8,7 +9,6 @@ import com.ipuc.web.list.IdentificationTypeFormat;
 import com.ipuc.web.list.SexFormat;
 import com.ipuc.web.util.Preconditions;
 import java.util.Date;
-import org.jogger.http.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;

@@ -6,7 +6,7 @@
 
 package com.ipuc.web.helper;
 
-import org.jogger.http.Request;
+import com.elibom.jogger.http.Request;
 
 /**
  *

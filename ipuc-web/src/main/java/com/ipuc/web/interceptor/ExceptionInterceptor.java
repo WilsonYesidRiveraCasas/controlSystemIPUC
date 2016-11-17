@@ -1,10 +1,10 @@
 package com.ipuc.web.interceptor;
 
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
+import com.elibom.jogger.middleware.router.interceptor.Interceptor;
+import com.elibom.jogger.middleware.router.interceptor.InterceptorExecution;
 import com.ipuc.web.exception.ExceptionHandler;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
-import org.jogger.middleware.router.interceptor.Interceptor;
-import org.jogger.middleware.router.interceptor.InterceptorExecution;
 
 /**
  *

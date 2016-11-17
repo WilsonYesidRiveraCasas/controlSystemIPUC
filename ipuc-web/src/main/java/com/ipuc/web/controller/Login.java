@@ -1,6 +1,9 @@
 
 package com.ipuc.web.controller;
 
+import com.elibom.jogger.http.Cookie;
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
 import com.ipuc.base.auth.Auth;
 import com.ipuc.base.auth.AuthManager;
 import com.ipuc.base.persona.Pastor;
@@ -11,9 +14,6 @@ import com.ipuc.web.exception.ConflictException;
 import com.ipuc.web.form.LoginForm;
 import com.ipuc.web.helper.ResponseFormat;
 import com.ipuc.web.util.Random;
-import org.jogger.http.Cookie;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
 
 /**
  *

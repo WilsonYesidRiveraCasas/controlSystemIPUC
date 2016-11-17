@@ -1,18 +1,18 @@
 
 package com.ipuc.web.interceptor;
 
+import com.elibom.jogger.exception.UnAuthorizedException;
+import com.elibom.jogger.http.Cookie;
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
+import com.elibom.jogger.middleware.router.interceptor.Interceptor;
+import com.elibom.jogger.middleware.router.interceptor.InterceptorExecution;
 import com.ipuc.base.auth.Auth;
 import com.ipuc.base.auth.AuthManager;
 import com.ipuc.base.persona.Pastor;
 import com.ipuc.base.persona.PastorManager;
 import com.ipuc.web.annotation.Secured;
 import com.ipuc.web.controller.Login;
-import org.jogger.exception.UnAuthorizedException;
-import org.jogger.http.Cookie;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
-import org.jogger.middleware.router.interceptor.Interceptor;
-import org.jogger.middleware.router.interceptor.InterceptorExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

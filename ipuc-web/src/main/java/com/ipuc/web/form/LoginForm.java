@@ -1,8 +1,8 @@
 
 package com.ipuc.web.form;
 
+import com.elibom.jogger.http.Request;
 import com.ipuc.web.exception.BadRequestException;
-import org.jogger.http.Request;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;

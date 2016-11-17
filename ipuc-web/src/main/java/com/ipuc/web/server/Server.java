@@ -6,18 +6,18 @@
 
 package com.ipuc.web.server;
 
+import com.elibom.jogger.Jogger;
+import com.elibom.jogger.middleware.router.RouterMiddleware;
+import com.elibom.jogger.middleware.router.loader.ControllerLoader;
+import com.elibom.jogger.middleware.router.loader.FileSystemRoutesLoader;
+import com.elibom.jogger.middleware.statik.StaticMiddleware;
+import com.elibom.jogger.template.FreemarkerTemplateEngine;
 import com.ipuc.web.interceptor.ExceptionInterceptor;
 import com.ipuc.web.interceptor.SecurityInterceptor;
 import freemarker.template.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import org.jogger.Jogger;
-import org.jogger.middleware.router.RouterMiddleware;
-import org.jogger.middleware.router.loader.ControllerLoader;
-import org.jogger.middleware.router.loader.FileSystemRoutesLoader;
-import org.jogger.middleware.statik.StaticMiddleware;
-import org.jogger.template.FreemarkerTemplateEngine;
 
 /**
  *

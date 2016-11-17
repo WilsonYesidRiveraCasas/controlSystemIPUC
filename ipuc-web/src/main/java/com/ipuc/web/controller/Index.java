@@ -1,6 +1,9 @@
 
 package com.ipuc.web.controller;
 
+import com.elibom.jogger.http.Cookie;
+import com.elibom.jogger.http.Request;
+import com.elibom.jogger.http.Response;
 import com.ipuc.base.congregacion.Congregacion;
 import com.ipuc.base.congregacion.CongregacionManager;
 import com.ipuc.base.membresia.MembresiaManager;
@@ -14,9 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.jogger.http.Cookie;
-import org.jogger.http.Request;
-import org.jogger.http.Response;
 
 /**
  *
